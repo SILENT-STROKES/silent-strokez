@@ -2492,6 +2492,81 @@ body.bw .video-more-button:hover {
   body.bw #home .hero-background-video { filter: grayscale(1); }
   body.bw #home .hero h1 span { background: linear-gradient(100deg, #111, #555, #111); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 </style>
+
+<style id="clear-home-video-presentation">
+  /* Full-frame intro: let the black video field disappear into the dark canvas. */
+  #home {
+    position: relative;
+    min-height: calc(100vh - 78px);
+    min-height: calc(100svh - 78px);
+    align-items: stretch;
+    justify-content: center;
+    padding: 0;
+    background: #030304 !important;
+    isolation: isolate;
+  }
+  #home .hero-background-video {
+    opacity: 1 !important;
+    filter: brightness(1.65) contrast(1.22) saturate(1.15) !important;
+    mix-blend-mode: screen;
+    object-fit: cover;
+    object-position: center;
+  }
+  #home .hero-brand-overlay {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: clamp(230px, 34vw, 400px);
+    max-height: min(76vh, 400px);
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 0 20px rgba(235, 25, 18, .4));
+    pointer-events: none;
+  }
+  #home .hero { display: none !important; }
+  #home .hero-sound-toggle {
+    z-index: 2;
+    color: #fff;
+    border-color: rgba(255,255,255,.48);
+    background: rgba(8,8,10,.68);
+    backdrop-filter: blur(10px);
+  }
+  #home .hero-sound-toggle:hover { background: rgba(255,255,255,.16); }
+  #home-intro {
+    padding: clamp(60px, 9vh, 110px) 0;
+    background: linear-gradient(135deg, #fff 0%, #fffafa 52%, #f3f3f3 100%);
+  }
+  #home-intro .hero {
+    min-height: 0;
+    padding: 0;
+  }
+  body.bw #home { background: #030304 !important; }
+  body.bw #home .hero-background-video {
+    filter: grayscale(1) brightness(1.65) contrast(1.22) !important;
+  }
+  body.bw #home .hero-brand-overlay {
+    filter: grayscale(1) drop-shadow(0 0 20px rgba(255,255,255,.28));
+  }
+  @media (max-width: 600px) {
+    #home {
+      min-height: calc(100vh - 78px);
+      min-height: calc(100svh - 78px);
+    }
+    #home .hero-brand-overlay {
+      width: min(78vw, 340px);
+      max-height: 62svh;
+    }
+    #home .hero-sound-toggle { top: 14px; right: 15px; }
+    #home-intro { padding: 54px 0 72px; }
+    #home-intro .hero h1 {
+      font-size: clamp(50px, 14vw, 70px);
+      letter-spacing: -.075em;
+    }
+  }
+</style>
+
 </head>
 
 
@@ -2596,7 +2671,12 @@ body.bw .video-more-button:hover {
         SOUND OFF
       </button>
 
-      <div class="container hero">
+      <img class="hero-brand-overlay" src="drawing-pad-favicon.png" alt="Silent Strokez logo">
+
+    </section>
+
+<section id="home-intro" class="home-intro-section" aria-label="Welcome">
+<div class="container hero">
 
         <span class="label">
           WELCOME TO
@@ -2629,15 +2709,8 @@ body.bw .video-more-button:hover {
             ABOUT ME
           </a>
 
-        </div>
-
-        <div class="scroll-indicator">
-          SCROLL
-        </div>
-
-      </div>
-
-    </section>
+        </div></div>
+</section>
 
 
     
