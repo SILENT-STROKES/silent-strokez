@@ -71,6 +71,20 @@
     @media(max-width:850px) { #drawing-pad .draw-main { grid-template-columns:1fr; } #drawing-pad .draw-sidepanel { display:grid; grid-template-columns:1fr 1fr; gap:12px; } #drawing-pad .draw-panel-block:first-child { grid-row:span 2; } }
     @media(max-width:600px) { #drawing-pad { padding:72px 0; } #drawing-pad .draw-workspace { padding:10px; border-radius:15px; } #drawing-pad .draw-toolbar { align-items:flex-start; } #drawing-pad .draw-tool-group { width:100%; border-right:0; border-bottom:1px solid #eee; padding:0 0 9px; } #drawing-pad .draw-main { gap:9px; } #drawing-pad .draw-canvas-wrap { min-height:340px; } #drawing-pad .draw-canvas-stack { height:340px; } #drawing-pad .draw-sidepanel { grid-template-columns:1fr; } #drawing-pad .draw-bottom { align-items:flex-start; flex-direction:column; } #drawing-pad .draw-actions { width:100%; } #drawing-pad .draw-actions .draw-btn { flex:1; } }
   </style>
+<style id="silent-strokez-global-theme-toggle">
+  /* Match the selected homepage appearance across this page too. */
+  body.bw { filter: grayscale(1) !important; }
+</style>
+<script>
+  try {
+    if (localStorage.getItem("silentStrokesBW") === "true") {
+      document.documentElement.classList.add("saved-bw-theme");
+    }
+  } catch (error) {}
+</script>
+<style>
+  html.saved-bw-theme body { filter: grayscale(1) !important; }
+</style>
 </head>
 <body>
   <main class="container">
