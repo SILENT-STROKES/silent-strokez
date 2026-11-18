@@ -246,6 +246,19 @@
       .auth { margin: 5vh auto; padding: 22px; }
     }
   </style>
+<style id="silent-strokez-global-theme-toggle">
+  body.bw { filter: grayscale(1) !important; }
+</style>
+<script>
+  try {
+    if (localStorage.getItem("silentStrokesBW") === "true") {
+      document.documentElement.classList.add("saved-bw-theme");
+    }
+  } catch (error) {}
+</script>
+<style>
+  html.saved-bw-theme body { filter: grayscale(1) !important; }
+</style>
 </head>
 
 <body>
