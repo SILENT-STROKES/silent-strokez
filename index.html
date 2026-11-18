@@ -2775,6 +2775,15 @@ body.bw .video-more-button:hover {
   }
 </style>
 
+<style id="silent-strokez-global-theme-toggle">
+  /* One switch controls the appearance of the complete homepage. */
+  body.bw {
+    filter: grayscale(1) !important;
+  }
+  body.bw #themeButton {
+    filter: grayscale(1);
+  }
+</style>
 </head>
 
 
@@ -4031,40 +4040,36 @@ body.bw .video-more-button:hover {
        BLACK & WHITE MODE
     ===================================================== */
 
-    const themeButton =
-      document.getElementById("themeButton");
+    const themeButton = document.getElementById("themeButton");
 
+    function applyWebsiteTheme(isBW) {
+      document.body.classList.toggle("bw", isBW);
+      if (themeButton) {
+        themeButton.textContent = isBW ? "COLOUR MODE" : "BLACK & WHITE";
+        themeButton.setAttribute("aria-pressed", String(isBW));
+        themeButton.setAttribute("aria-label", isBW
+          ? "Switch the whole website to colour"
+          : "Switch the whole website to black and white");
+      }
+      try {
+        localStorage.setItem("silentStrokesBW", String(isBW));
+      } catch (error) {
+        /* Theme switching still works when browser storage is unavailable. */
+      }
+    }
 
-    themeButton.addEventListener("click", () => {
-
-      document.body.classList.toggle("bw");
-
-      const isBW =
-        document.body.classList.contains("bw");
-
-      themeButton.textContent =
-        isBW
-          ? "COLOUR MODE"
-          : "BLACK & WHITE";
-
-      localStorage.setItem(
-        "silentStrokesBW",
-        isBW
-      );
-
-    });
-
-
-    if (
-      localStorage.getItem("silentStrokesBW")
-      === "true"
-    ) {
-
-      document.body.classList.add("bw");
-
-      themeButton.textContent =
-        "COLOUR MODE";
-
+    if (themeButton) {
+      let savedBW = false;
+      try {
+        savedBW = localStorage.getItem("silentStrokesBW") === "true";
+      } catch (error) {
+        savedBW = false;
+      }
+      applyWebsiteTheme(savedBW);
+      themeButton.addEventListener("click", () => {
+        const isBW = !document.body.classList.contains("bw");
+        applyWebsiteTheme(isBW);
+      });
     }
 
 
