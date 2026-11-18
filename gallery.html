@@ -23,7 +23,21 @@ body.bw .button:hover{background:var(--ink);color:var(--white)}
 .lightbox.is-open{display:flex}
 .lightbox-image{display:block;max-width:min(92vw,1300px);max-height:88vh;object-fit:contain;border-radius:8px}
 .lightbox-close{position:absolute;top:16px;right:18px;width:46px;height:46px;border:1px solid #ffffff77;border-radius:50%;background:#171717;color:#fff;font:300 30px/1 Arial,sans-serif;cursor:pointer}
-.lightbox-close:hover{background:#fff;color:#111}</style></head>
+.lightbox-close:hover{background:#fff;color:#111}</style><style id="silent-strokez-global-theme-toggle">
+  /* Match the selected homepage appearance across this page too. */
+  body.bw { filter: grayscale(1) !important; }
+</style>
+<script>
+  try {
+    if (localStorage.getItem("silentStrokesBW") === "true") {
+      document.documentElement.classList.add("saved-bw-theme");
+    }
+  } catch (error) {}
+</script>
+<style>
+  html.saved-bw-theme body { filter: grayscale(1) !important; }
+</style>
+</head>
 <body><header class="site-header"><nav class="nav wrap" aria-label="Main navigation"><a class="brand" href="https://silent-strokes.github.io/silent-strokez/" aria-label="Silent Strokez home"><img class="brand-logo" src="drawing-pad-favicon.png" alt="Silent Strokez illustrated logo"><span class="brand-name">SILENT STROKEZ</span></a><div class="nav-links"><a href="https://silent-strokes.github.io/silent-strokez/">Home</a><a href="gallery.html" aria-current="page">Gallery</a><a href="contact.html">Contact</a><a class="optional" href="https://www.youtube.com/@sailaksh_drawin_7_official?si=NImZdxwD8kOdMG9W" target="_blank" rel="noopener noreferrer">YouTube ↗</a><button class="mode" type="button" id="themeToggle" aria-pressed="false">BLACK &amp; WHITE</button></div></nav></header>
 <main class="wrap"><section class="hero"><div class="eyebrow">My work · Silent Strokez</div><h1>The Gallery.</h1><p class="intro">A collection of drawings, sketches, illustrations and creative experiments from Silent Strokez.</p></section>
 <section class="gallery" aria-label="Six artworks">
