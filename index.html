@@ -2248,7 +2248,100 @@ body.bw .video-more-button:hover {
       -webkit-text-fill-color: #111;
     }
 
-</style>
+
+    /* Homepage layout and video contrast repair */
+    #home {
+      position: relative;
+      min-height: calc(100svh - 78px);
+      display: flex;
+      align-items: center;
+      background: #080808;
+      color: #fff;
+      isolation: isolate;
+    }
+    #home::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(0,0,0,.88), rgba(0,0,0,.66) 48%, rgba(0,0,0,.32));
+    }
+    #home::after { z-index: 1; pointer-events: none; }
+    #home .hero-background-video {
+      z-index: 0;
+      opacity: .48;
+      filter: brightness(.72) saturate(.78);
+      object-fit: cover;
+    }
+    #home .hero {
+      z-index: 2;
+      width: min(1180px, calc(100% - 60px));
+      min-height: min(720px, calc(100svh - 78px));
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px 0;
+    }
+    #home .hero .label { color: #e5e5e5; }
+    #home .hero h1 {
+      max-width: 100%;
+      color: #fff;
+      font-size: clamp(4.2rem, 10vw, 9.5rem);
+      line-height: .86;
+      letter-spacing: -.075em;
+    }
+    #home .hero h1 span {
+      background: linear-gradient(100deg, #fff 0%, #d8b16c 48%, #a66a2d 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    #home .hero-title { color: #fff; font-size: clamp(20px, 2.2vw, 28px); }
+    #home .hero-description { max-width: 620px; color: #e0e0e0; }
+    #home .hero-description strong { color: #fff; }
+    #home .hero .button.primary { background: #b08b45; border-color: #b08b45; color: #111; }
+    #home .hero .button.primary:hover { background: #d0ad6e; border-color: #d0ad6e; }
+    #home .hero .buttons a.button:not(.primary) {
+      background: rgba(0,0,0,.42);
+      border-color: rgba(255,255,255,.8);
+      color: #fff !important;
+      -webkit-text-fill-color: #fff;
+    }
+    #home .hero .buttons a.button:not(.primary):hover {
+      background: #fff;
+      border-color: #fff;
+      color: #111 !important;
+      -webkit-text-fill-color: #111;
+    }
+    body.bw #home { background: #080808; color: #fff; }
+    body.bw #home .hero .label,
+    body.bw #home .hero-title,
+    body.bw #home .hero-description,
+    body.bw #home .hero-description strong { color: #fff; }
+    body.bw #home .hero-background-video { filter: grayscale(1) brightness(.65); }
+    @media (max-width: 600px) {
+      #home { min-height: calc(100svh - 70px); }
+      #home .hero {
+        width: calc(100% - 36px);
+        min-height: calc(100svh - 70px);
+        padding: 76px 0 64px;
+      }
+      #home .hero h1 {
+        font-size: clamp(3.4rem, 16vw, 5.4rem);
+        letter-spacing: -.07em;
+        line-height: .9;
+      }
+      #home .hero-title { margin-top: 24px; }
+      #home .hero-description { font-size: 14px; line-height: 1.7; }
+      #home .hero .buttons { flex-direction: row; flex-wrap: wrap; }
+      #home .hero .buttons .button { width: auto; min-height: 46px; padding: 0 16px; }
+      #home::before { background: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.58)); }
+    }
+
+  </style>
 
 <style>
   .owner-studio-entry{display:inline-flex;align-items:center;gap:.45rem;margin:1.1rem auto .25rem;padding:.55rem .85rem;border:1px solid rgba(128,128,128,.28);border-radius:999px;color:inherit;text-decoration:none;font-size:.72rem;letter-spacing:.04em;opacity:.72;transition:opacity .2s,border-color .2s}
@@ -2795,7 +2888,9 @@ body.bw .video-more-button:hover {
             ABOUT ME
           </a>
 
-        </div></div>
+        </div>
+      </div>
+    </section>
 
  
 
