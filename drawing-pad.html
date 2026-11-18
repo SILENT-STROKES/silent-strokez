@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
-  <meta name="description" content="Silent Strokes Drawing Pad 2.0 — an advanced browser-based drawing studio.">
-  <title>Silent Strokes — Advanced Drawing Pad 2.0</title>
+  <meta name="description" content="Silent Strokez Drawing Pad 2.0 — an advanced browser-based drawing studio.">
+  <title>Silent Strokez — Advanced Drawing Pad 2.0</title>
   <style>
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -20,7 +20,7 @@
     .page-header h1 span { color: #d00000; }
     .page-header p { color: #777; font-size: 14px; line-height: 1.7; }
     /* =====================================================
-       SILENT STROKES DRAWING PAD 2.0
+       SILENT STROKEZ DRAWING PAD 2.0
     ====================================================== */
     #drawing-pad { padding: 100px 0; background: #f3f3f3; color: #111; }
     #drawing-pad .draw-heading { max-width: 760px; margin: 0 auto 34px; text-align: center; }
@@ -75,7 +75,7 @@
 <body>
   <main class="container">
     <!-- =====================================================
-         DRAWING PAD 2.0 — SILENT STROKES CREATIVE STUDIO
+         DRAWING PAD 2.0 — SILENT STROKEZ CREATIVE STUDIO
     ====================================================== -->
     <section id="drawing-pad">
       <div class="container">
@@ -255,7 +255,7 @@
       function composite(background=null){const {w,h}=dimensions(),out=document.createElement('canvas');out.width=Math.round(w*dpr());out.height=Math.round(h*dpr());const c=out.getContext('2d');if(background&&background!=='transparent'){c.fillStyle=background;c.fillRect(0,0,out.width,out.height);}layers.forEach(l=>{if(l.visible){c.globalAlpha=l.opacity;c.drawImage(l.canvas,0,0,out.width,out.height);}});c.globalAlpha=1;return out;}
       function download(type){const bg=type==='image/jpeg'?($('drawBackground').value==='transparent'?'#ffffff':$('drawBackground').value):null;const out=composite(bg);const a=document.createElement('a');a.download='silent-strokes-artwork.'+(type==='image/jpeg'?'jpg':'png');a.href=out.toDataURL(type,.94);a.click();say('Artwork exported successfully.');}
       function artbook(){let items=[];try{items=JSON.parse(localStorage.getItem(ARTBOOK_KEY)||'[]');}catch{}const host=$('drawArtbook');host.innerHTML='';items.forEach((item,i)=>{const card=document.createElement('div');card.style.cssText='border:1px solid #e5e5e5;border-radius:9px;padding:6px;background:#fff;';const img=document.createElement('img');img.src=item.data;img.alt=item.name;img.style.cssText='width:100%;aspect-ratio:1.4;object-fit:contain;background:#f4f4f4;border-radius:5px;';const label=document.createElement('div');label.textContent=item.name;label.style.cssText='font-size:10px;font-weight:700;margin:6px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';const actions=document.createElement('div');actions.style.cssText='display:flex;gap:4px;';const load=document.createElement('button');load.className='draw-btn';load.textContent='Open';load.style.flex='1';load.addEventListener('click',()=>{const im=new Image();im.onload=()=>{layers.forEach(l=>{l.ctx.clearRect(0,0,l.canvas.width,l.canvas.height);l.ctx.drawImage(im,0,0,dimensions().w,dimensions().h);l.history=[];snapshot(l);});say('Opened '+item.name);};im.src=item.data;});const del=document.createElement('button');del.className='draw-btn';del.textContent='×';del.addEventListener('click',()=>{items.splice(i,1);localStorage.setItem(ARTBOOK_KEY,JSON.stringify(items));artbook();});actions.append(load,del);card.append(img,label,actions);host.appendChild(card);});}
-      function saveArt(){try{const items=JSON.parse(localStorage.getItem(ARTBOOK_KEY)||'[]');if(items.length>=20){say('Artbook is full (20 artworks). Delete one to save another.');return;}const name=prompt('Name your artwork','My Silent Strokes artwork');if(!name)return;items.unshift({name:name.trim().slice(0,60),data:composite('#ffffff').toDataURL('image/png'),date:new Date().toISOString()});localStorage.setItem(ARTBOOK_KEY,JSON.stringify(items));artbook();say('Artwork saved to your private Artbook.');}catch(e){say('Could not save: browser storage may be full. Export a PNG instead.');}}
+      function saveArt(){try{const items=JSON.parse(localStorage.getItem(ARTBOOK_KEY)||'[]');if(items.length>=20){say('Artbook is full (20 artworks). Delete one to save another.');return;}const name=prompt('Name your artwork','My Silent Strokez artwork');if(!name)return;items.unshift({name:name.trim().slice(0,60),data:composite('#ffffff').toDataURL('image/png'),date:new Date().toISOString()});localStorage.setItem(ARTBOOK_KEY,JSON.stringify(items));artbook();say('Artwork saved to your private Artbook.');}catch(e){say('Could not save: browser storage may be full. Export a PNG instead.');}}
       function scheduleSave(){clearTimeout(autosaveTimer);autosaveTimer=setTimeout(()=>{try{const data=layers.map(l=>({name:l.name,visible:l.visible,opacity:l.opacity,image:l.canvas.toDataURL('image/png')}));localStorage.setItem(PROJECT_KEY,JSON.stringify({data,active,background:$('drawBackground').value}));}catch(e){say('Autosave storage is full. Export your artwork to keep a copy.');}},450);}
       function loadProject(){try{const p=JSON.parse(localStorage.getItem(PROJECT_KEY)||'null');if(!p?.data?.length)return false;layers.forEach(l=>l.canvas.remove());layers=[];p.data.forEach((d,i)=>{const l=makeLayer(d.name||('Layer '+(i+1)));l.visible=d.visible!==false;l.opacity=Number.isFinite(d.opacity)?d.opacity:1;const im=new Image();im.onload=()=>{l.ctx.drawImage(im,0,0,dimensions().w,dimensions().h);l.history=[];snapshot(l);renderLayers();};im.src=d.image;layers.push(l);});active=Math.min(p.active||0,layers.length-1);$('drawBackground').value=p.background||'#ffffff';renderLayers();return true;}catch{return false;}}
       firstCanvas.className='draw-layer-canvas';layers=[{name:'Sketch',canvas:firstCanvas,ctx:firstCanvas.getContext('2d'),visible:true,opacity:1,history:[],index:-1}];resizeLayer(layers[0],true);snapshot(layers[0]);
