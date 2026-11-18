@@ -2505,9 +2505,14 @@ body.bw .video-more-button:hover {
     background: #030304 !important;
     isolation: isolate;
   }
+  #home::before,
+  #home::after {
+    display: none !important;
+  }
   #home .hero-background-video {
+    display: block;
     opacity: 1 !important;
-    filter: brightness(1.65) contrast(1.22) saturate(1.15) !important;
+    filter: brightness(1.25) contrast(1.2) saturate(1.12) !important;
     mix-blend-mode: screen;
     object-fit: cover;
     object-position: center;
@@ -2544,7 +2549,7 @@ body.bw .video-more-button:hover {
   }
   body.bw #home { background: #030304 !important; }
   body.bw #home .hero-background-video {
-    filter: grayscale(1) brightness(1.65) contrast(1.22) !important;
+    filter: grayscale(1) brightness(1.25) contrast(1.2) !important;
   }
   body.bw #home .hero-brand-overlay {
     filter: grayscale(1) drop-shadow(0 0 20px rgba(255,255,255,.28));
