@@ -4040,7 +4040,7 @@ body.bw .video-more-button:hover {
                 </div>
                 <div><div class="community-platform-name">YOUTUBE</div><div class="community-handle">@sailaksh_drawin_7_official</div></div>
               </div>
-              <span class="ss-community-platform-tag">VIDEO &amp; SHORTS</span>
+              <span class="ss-community-platform-tag" id="youtubeLiveStatus">CONNECTING TO LIVE COUNT…</span>
             </div>
             <div class="community-stat-row">
               <div class="ss-community-stat"><div class="community-stat-value" data-community-stat="youtubeSubscribers">0</div><div class="community-stat-label">SUBSCRIBERS</div></div>
@@ -4076,7 +4076,7 @@ body.bw .video-more-button:hover {
             <a class="community-button" href="https://www.instagram.com/sailaksh_drawin_official/" target="_blank" rel="noopener noreferrer">FOLLOW ON INSTAGRAM <span aria-hidden="true">↗</span></a>
           </article>
         </div>
-        <p class="ss-community-disclaimer">Community figures are manually updated and may differ from live platform totals.</p>
+        <p class="ss-community-disclaimer">YouTube subscriber count is fetched from a public live-count service and refreshes about every 60 seconds. Instagram is set to 50 followers as requested; posts and reels remain manually configured.</p>
       </div>
     </section>ion>
 
@@ -4253,44 +4253,68 @@ body.bw .video-more-button:hover {
 
 
     /* =====================================================
-       SUBSCRIBERS & FOLLOWERS — MANUAL COUNTS
-       Update these values when your real counts change.
+       COMMUNITY COUNTS
+       YouTube: public live-count service, refreshed every 60s.
+       Instagram: manually configured follower count.
     ===================================================== */
     const COMMUNITY_STATS = {
-      youtubeSubscribers: 250,
+      youtubeSubscribers: null,
       youtubeViews: 120000,
-      youtubeGoal: 2000,
-      instagramFollowers: 350,
+      youtubeGoal: 1000,
+      instagramFollowers: 50,
       instagramPosts: 100,
-      instagramGoal: 2000
+      instagramGoal: 1000
     };
+    const YOUTUBE_CHANNEL_ID = 'UCOIrbi33AGQ7CRNs3s-h_lQ';
+    const YOUTUBE_LIVE_COUNT_URL = 'https://api.socialcounts.org/youtube-live-subscriber-count/' + YOUTUBE_CHANNEL_ID;
+
     function communityFormatNumber(value) {
+      if (value === null || value === undefined || !Number.isFinite(Number(value))) return '—';
+      value = Number(value);
       if (value >= 1000000) return (value / 1000000).toFixed(value >= 10000000 ? 0 : 1).replace(/\.0$/, '') + 'M';
       if (value >= 100000) return value.toLocaleString('en-IN');
-      if (value >= 10000) return (value / 1000).toFixed(value >= 100000 ? 0 : 1).replace(/\.0$/, '') + 'K';
-      return value.toLocaleString();
+      if (value >= 10000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+      return Math.round(value).toLocaleString('en-IN');
     }
-    function communityCountUp(element, target) {
-      const duration = 1300;
-      const start = performance.now();
-      function step(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        element.textContent = communityFormatNumber(Math.round(target * eased));
-        if (progress < 1) requestAnimationFrame(step);
+    function communityUpdateProgress(key, current, goal) {
+      const goalEl = document.querySelector(`[data-community-goal="${key}"]`);
+      const percentEl = document.querySelector(`[data-community-percent="${key}"]`);
+      const bar = document.querySelector(`[data-community-progress="${key}"]`);
+      const percent = goal > 0 && current !== null ? Math.min(Math.round((current / goal) * 100), 100) : 0;
+      if (goalEl) goalEl.textContent = communityFormatNumber(goal);
+      if (percentEl) percentEl.textContent = current === null ? 'Waiting for live count' : percent + '%';
+      if (bar) requestAnimationFrame(() => { bar.style.width = percent + '%'; });
+    }
+    function communityRenderCounts() {
+      document.querySelectorAll('[data-community-stat]').forEach(element => {
+        element.textContent = communityFormatNumber(COMMUNITY_STATS[element.dataset.communityStat]);
+      });
+      const total = COMMUNITY_STATS.youtubeSubscribers === null ? null : COMMUNITY_STATS.youtubeSubscribers + COMMUNITY_STATS.instagramFollowers;
+      const totalEl = document.getElementById('communityTotalReach');
+      if (totalEl) totalEl.textContent = communityFormatNumber(total);
+      communityUpdateProgress('youtube', COMMUNITY_STATS.youtubeSubscribers, COMMUNITY_STATS.youtubeGoal);
+      communityUpdateProgress('instagram', COMMUNITY_STATS.instagramFollowers, COMMUNITY_STATS.instagramGoal);
+    }
+    async function communityRefreshYouTubeCount() {
+      const status = document.getElementById('youtubeLiveStatus');
+      try {
+        const response = await fetch(YOUTUBE_LIVE_COUNT_URL, {cache: 'no-store'});
+        if (!response.ok) throw new Error('Live count service unavailable');
+        const data = await response.json();
+        const count = Number(data.est_sub || data.API_sub || data.subscriberCount);
+        if (!Number.isFinite(count) || count < 0) throw new Error('No subscriber count in response');
+        COMMUNITY_STATS.youtubeSubscribers = Math.floor(count);
+        communityRenderCounts();
+        if (status) status.textContent = 'LIVE COUNT · UPDATED JUST NOW';
+      } catch (error) {
+        console.warn('Silent Strokez could not refresh the YouTube subscriber count:', error);
+        if (status) status.textContent = 'LIVE COUNT TEMPORARILY UNAVAILABLE';
+        communityRenderCounts();
       }
-      requestAnimationFrame(step);
     }
-    document.querySelectorAll('[data-community-stat]').forEach(element => {
-      communityCountUp(element, COMMUNITY_STATS[element.dataset.communityStat] || 0);
-    });
-    communityCountUp(document.getElementById('communityTotalReach'), COMMUNITY_STATS.youtubeSubscribers + COMMUNITY_STATS.instagramFollowers);
-    [['youtube', COMMUNITY_STATS.youtubeSubscribers, COMMUNITY_STATS.youtubeGoal], ['instagram', COMMUNITY_STATS.instagramFollowers, COMMUNITY_STATS.instagramGoal]].forEach(([key, current, goal]) => {
-      const percent = goal > 0 ? Math.min(Math.round((current / goal) * 100), 100) : 0;
-      document.querySelector(`[data-community-goal="${key}"]`).textContent = communityFormatNumber(goal);
-      document.querySelector(`[data-community-percent="${key}"]`).textContent = percent + '%';
-      requestAnimationFrame(() => { document.querySelector(`[data-community-progress="${key}"]`).style.width = percent + '%'; });
-    });
+    communityRenderCounts();
+    communityRefreshYouTubeCount();
+    window.setInterval(communityRefreshYouTubeCount, 60000);
 
 
     /* =====================================================
