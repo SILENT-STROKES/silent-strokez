@@ -2842,6 +2842,22 @@ body.bw .video-more-button:hover {
   }
   @media(max-width:600px) { .ss-access-panel { left:10px; bottom:10px; } }
 </style>
+<style id="silent-strokez-community-youtube-features">
+  #ss-creator-features { padding: 88px 0; background: #f5f0e6; color: #15241e; }
+  #ss-creator-features .ss-feature-heading { max-width:760px; margin:0 auto 38px; text-align:center; }
+  #ss-creator-features .ss-feature-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; }
+  #ss-creator-features .ss-feature-card { border:1px solid rgba(21,36,30,.12); border-radius:22px; padding:28px; background:#fff; box-shadow:0 14px 40px rgba(21,36,30,.06); }
+  #ss-creator-features h3 { margin:0 0 12px; font-size:clamp(22px,3vw,30px); }
+  #ss-creator-features p { color:#59645e; line-height:1.7; }
+  #ss-creator-features .ss-feature-button { display:inline-flex; align-items:center; justify-content:center; margin-top:18px; padding:12px 18px; border-radius:30px; background:#15241e; color:#fff; font-size:11px; font-weight:800; letter-spacing:1px; }
+  #ss-creator-features .ss-feature-button.gold { background:#b08b45; color:#15241e; }
+  #ss-creator-features .ss-youtube-frame { display:flex; justify-content:center; margin:18px auto 0; }
+  #ss-creator-features .ss-youtube-frame iframe { width:min(100%,290px); aspect-ratio:9/16; border:0; border-radius:16px; background:#111; }
+  #ss-creator-features .ss-prompt { margin-top:18px; padding:20px; border-radius:16px; background:#f5f0e6; border:1px solid #e7ddc8; font-family:"Playfair Display",serif; font-size:clamp(19px,2.4vw,25px); line-height:1.45; }
+  #ss-creator-features .ss-challenge-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+  #ss-creator-features .ss-challenge-actions button { border:0; cursor:pointer; }
+  @media(max-width:760px) { #ss-creator-features { padding:68px 0; } #ss-creator-features .ss-feature-grid { grid-template-columns:1fr; } #ss-creator-features .ss-feature-card { padding:22px; } }
+</style>
 </head>
 
 
@@ -3537,6 +3553,51 @@ body.bw .video-more-button:hover {
 
     </section>
 
+
+    <!-- =====================================================
+     YOUTUBE SPOTLIGHT + COMMUNITY DRAWING CHALLENGE
+====================================================== -->
+<section id="ss-creator-features">
+  <div class="container">
+    <div class="ss-feature-heading reveal">
+      <span class="section-label">WATCH · CREATE · CONNECT</span>
+      <h2 class="section-title">The <strong>Creator Corner.</strong></h2>
+      <p>Watch a featured Short, explore the channel, and take part in a creative challenge.</p>
+    </div>
+    <div class="ss-feature-grid">
+      <article class="ss-feature-card reveal">
+        <span class="section-label">YOUTUBE SPOTLIGHT</span>
+        <h3>From my sketchbook to your screen.</h3>
+        <p>Watch a featured Silent Strokez Short here, then visit the channel for the full collection of anime art, drawing edits and new uploads.</p>
+        <div class="ss-youtube-frame">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/ljAcC4oDMnc"
+            title="Featured Silent Strokez YouTube Short"
+            loading="lazy"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen
+          ></iframe>
+        </div>
+        <a class="ss-feature-button" href="https://www.youtube.com/@sailaksh_drawin_7_official/shorts" target="_blank" rel="noopener noreferrer">EXPLORE ALL SHORTS ↗</a>
+        <a class="ss-feature-button gold" href="https://www.youtube.com/@sailaksh_drawin_7_official?sub_confirmation=1" target="_blank" rel="noopener noreferrer">SUBSCRIBE ↗</a>
+      </article>
+      <article class="ss-feature-card reveal">
+        <span class="section-label">COMMUNITY DRAWING CHALLENGE</span>
+        <h3>What will you draw today?</h3>
+        <p>Try a creative prompt, make it your own, and share your finished artwork with the Silent Strokez community.</p>
+        <div class="ss-prompt" id="ssChallengePrompt" aria-live="polite">Draw your favourite anime character using only three colours.</div>
+        <div class="ss-challenge-actions">
+          <button class="ss-feature-button gold" id="ssNewChallenge" type="button">NEW PROMPT ↻</button>
+          <button class="ss-feature-button" id="ssCopyChallenge" type="button">COPY PROMPT</button>
+        </div>
+        <p id="ssChallengeStatus" role="status" aria-live="polite" style="margin-top:12px;font-size:12px"></p>
+        <a class="ss-feature-button" href="https://discord.gg/D8CcjGzmh" target="_blank" rel="noopener noreferrer">SHARE IN DISCORD ↗</a>
+        <a class="ss-feature-button gold" href="form.html">SEND YOUR ART / IDEA ↗</a>
+      </article>
+    </div>
+  </div>
+</section>
 
     <!-- =====================================================
          BLOG
@@ -4529,6 +4590,42 @@ body.bw .video-more-button:hover {
       try { localStorage.setItem(motionKey, String(checkbox.checked)); } catch (e) {}
     });
   }
+})();
+</script>
+<script id="silent-strokez-community-feature-script">
+(function () {
+  const prompts = [
+    "Draw your favourite anime character using only three colours.",
+    "Create an original hero inspired by the weather today.",
+    "Redesign a familiar character with your own outfit and hairstyle.",
+    "Draw an expressive face using only line art—no shading.",
+    "Turn an everyday object into an anime character.",
+    "Create a mini manga panel that tells a story without dialogue.",
+    "Draw a character from memory, then compare it with the reference.",
+    "Design an original character whose power is inspired by nature."
+  ];
+  const prompt = document.getElementById("ssChallengePrompt");
+  const next = document.getElementById("ssNewChallenge");
+  const copy = document.getElementById("ssCopyChallenge");
+  const status = document.getElementById("ssChallengeStatus");
+  if (!prompt || !next || !copy) return;
+  let last = 0;
+  next.addEventListener("click", () => {
+    let index = Math.floor(Math.random() * prompts.length);
+    if (prompts.length > 1 && index === last) index = (index + 1) % prompts.length;
+    last = index;
+    prompt.textContent = prompts[index];
+    if (status) status.textContent = "New drawing prompt ready!";
+  });
+  copy.addEventListener("click", async () => {
+    const value = prompt.textContent.trim();
+    try {
+      await navigator.clipboard.writeText(value);
+      if (status) status.textContent = "Prompt copied. Happy drawing!";
+    } catch (error) {
+      if (status) status.textContent = "Select and copy the prompt above.";
+    }
+  });
 })();
 </script>
 </body>
