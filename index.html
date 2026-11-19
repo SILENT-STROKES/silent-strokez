@@ -2843,6 +2843,21 @@ body.bw .video-more-button:hover {
   @media(max-width:600px) { .ss-access-panel { left:10px; bottom:10px; } }
 </style>
 
+
+<style id="silent-strokez-loader-css-failsafe">
+  /* CSS-only fallback: the loader must never cover the page indefinitely. */
+  #loader {
+    animation: silentStrokezLoaderAutoHide .5s ease 8s forwards !important;
+  }
+  @keyframes silentStrokezLoaderAutoHide {
+    to {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+  }
+</style>
+
 </head>
 
 
