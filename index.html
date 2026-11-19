@@ -2343,7 +2343,29 @@ body.bw .video-more-button:hover {
       #home::before { background: linear-gradient(90deg, rgba(0,0,0,.82), rgba(0,0,0,.58)); }
     }
 
-  </style>
+  
+    /* Silent Strokez social links — clean white and red identity */
+    .ss-social-premium { background:#fff; padding:clamp(64px,8vw,104px) 0; }
+    .ss-social-premium .social-header { max-width:720px; margin:0 auto 38px; text-align:center; }
+    .ss-social-premium .social-header h2 strong { color:#e00000; }
+    .ss-social-intro { max-width:570px; margin:14px auto 0; color:#686868; font-size:14px; line-height:1.8; }
+    .ss-social-grid { grid-template-columns:repeat(5,minmax(0,1fr)); gap:16px; align-items:stretch; }
+    .ss-social-card { position:relative; min-width:0; min-height:255px; padding:25px 18px 21px; border:1px solid #ededed; border-radius:18px; background:#fff; box-shadow:0 8px 26px rgba(20,20,20,.035); text-decoration:none; overflow:hidden; }
+    .ss-social-card::before { content:""; position:absolute; inset:0 auto auto 0; width:100%; height:3px; background:#e00000; transform:scaleX(0); transform-origin:left; transition:transform .25s ease; }
+    .ss-social-card:hover::before { transform:scaleX(1); }
+    .ss-social-card:hover { border-color:#f0bcbc; background:#fffafa; box-shadow:0 16px 34px rgba(160,0,0,.08); transform:translateY(-6px); }
+    .ss-social-icon { width:48px; height:48px; display:grid; place-items:center; border-radius:15px; background:#fff0f0; color:#d90000; font-size:25px; font-weight:850; margin-bottom:13px; }
+    .ss-social-platform { color:#e00000!important; font-size:9px!important; font-weight:800; letter-spacing:1.5px; line-height:1.4; }
+    .ss-social-card strong { color:#171717; font-size:17px; letter-spacing:-.3px; }
+    .ss-social-card .ss-social-description { min-height:48px; color:#777; font-size:11px; line-height:1.65; }
+    .ss-social-action { display:flex; align-items:center; justify-content:space-between; width:100%; margin-top:9px; padding-top:13px; border-top:1px solid #f0e5e5; color:#222!important; font-size:11px!important; font-weight:750; }
+    .ss-social-action b { color:#e00000; font-size:17px; transition:transform .2s ease; }
+    .ss-social-card:hover .ss-social-action b { transform:translate(2px,-2px); }
+    .ss-social-footnote { margin:25px 0 0; text-align:center; color:#999; font-size:11px; letter-spacing:.4px; }
+    @media(max-width:1100px) { .ss-social-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
+    @media(max-width:700px) { .ss-social-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } .ss-social-card { min-height:245px; padding:20px 14px 17px; } }
+    @media(max-width:420px) { .ss-social-grid { grid-template-columns:1fr; } .ss-social-card { min-height:0; } .ss-social-card .ss-social-description { min-height:0; } }
+</style>
 
 <style>
   .owner-studio-entry{display:inline-flex;align-items:center;gap:.45rem;margin:1.1rem auto .25rem;padding:.55rem .85rem;border:1px solid rgba(128,128,128,.28);border-radius:999px;color:inherit;text-decoration:none;font-size:.72rem;letter-spacing:.04em;opacity:.72;transition:opacity .2s,border-color .2s}
@@ -4003,141 +4025,58 @@ body.bw .video-more-button:hover {
          SOCIAL
     ====================================================== -->
 
-    <section class="social-section">
-
+    <section class="social-section ss-social-premium" id="social-media">
       <div class="container">
-
         <div class="social-header reveal">
-
-          <span class="section-label">
-            STAY CONNECTED
-          </span>
-
-          <h2>
-            Social <strong>Media.</strong>
-          </h2>
-
+          <span class="section-label">STAY CONNECTED</span>
+          <h2>Social <strong>Media.</strong></h2>
+          <p class="ss-social-intro">Follow the journey, explore new artwork, and be part of the Silent Strokez creative community.</p>
         </div>
 
-
-        <div class="social-grid">
-
-
-          <a
-            class="social-card reveal"
-            href="https://pin.it/72b478MUD"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-
-            <div class="social-icon">
-              📌
-            </div>
-
-            <strong>
-              Pinterest
-            </strong>
-
-            <span>
-              Follow my inspiration
-            </span>
-
+        <div class="social-grid ss-social-grid">
+          <a class="social-card ss-social-card reveal" href="https://pin.it/72b478MUD" target="_blank" rel="noopener noreferrer" aria-label="Visit Silent Strokez on Pinterest">
+            <span class="ss-social-icon" aria-hidden="true">P</span>
+            <span class="ss-social-platform">GET INSPIRED</span>
+            <strong>Pinterest</strong>
+            <span class="ss-social-description">Explore ideas, references and creative inspiration.</span>
+            <span class="ss-social-action">Explore boards <b aria-hidden="true">↗</b></span>
           </a>
 
-
-          <a
-            class="social-card reveal"
-            href="https://youtube.com/@sailaksh_drawin_7_official?si=3bJBTf8a2tdvGy_d"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-
-            <div class="social-icon">
-              ▶
-            </div>
-
-            <strong>
-              YouTube
-            </strong>
-
-            <span>
-              Watch my videos
-            </span>
-
+          <a class="social-card ss-social-card reveal" href="https://youtube.com/@sailaksh_drawin_7_official" target="_blank" rel="noopener noreferrer" aria-label="Visit Silent Strokez on YouTube">
+            <span class="ss-social-icon ss-youtube-icon" aria-hidden="true">▶</span>
+            <span class="ss-social-platform">WATCH & CREATE</span>
+            <strong>YouTube</strong>
+            <span class="ss-social-description">Watch anime drawings, Shorts and art videos.</span>
+            <span class="ss-social-action">Watch videos <b aria-hidden="true">↗</b></span>
           </a>
 
-
-          <a
-            class="social-card reveal"
-            href="https://www.instagram.com/sailaksh_drawin_official"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-
-            <div class="social-icon">
-              ◎
-            </div>
-
-            <strong>
-              Instagram
-            </strong>
-
-            <span>
-              Follow my artwork
-            </span>
-
+          <a class="social-card ss-social-card reveal" href="https://www.instagram.com/sailaksh_drawin_official" target="_blank" rel="noopener noreferrer" aria-label="Visit Silent Strokez on Instagram">
+            <span class="ss-social-icon ss-instagram-icon" aria-hidden="true">◎</span>
+            <span class="ss-social-platform">ART & UPDATES</span>
+            <strong>Instagram</strong>
+            <span class="ss-social-description">See artwork, sketches and behind-the-scenes moments.</span>
+            <span class="ss-social-action">Follow artwork <b aria-hidden="true">↗</b></span>
           </a>
 
-
-          <a
-            class="social-card reveal"
-            href="https://discord.gg/D8CcjGzmh"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-
-            <div class="social-icon">
-              💬
-            </div>
-
-            <strong>
-              Discord
-            </strong>
-
-            <span>
-              Join the community
-            </span>
-
+          <a class="social-card ss-social-card reveal" href="https://discord.gg/D8CcjGzmh" target="_blank" rel="noopener noreferrer" aria-label="Join the Silent Strokez Discord community">
+            <span class="ss-social-icon ss-discord-icon" aria-hidden="true">⌁</span>
+            <span class="ss-social-platform">JOIN THE COMMUNITY</span>
+            <strong>Discord</strong>
+            <span class="ss-social-description">Connect with fellow creators and art enthusiasts.</span>
+            <span class="ss-social-action">Join community <b aria-hidden="true">↗</b></span>
           </a>
 
-
-          <a
-            class="social-card reveal"
-            href="https://whatsapp.com/channel/0029VakTbq0HQbRuymlz080T"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-
-            <div class="social-icon">
-              ◉
-            </div>
-
-            <strong>
-              WhatsApp
-            </strong>
-
-            <span>
-              Stay connected
-            </span>
-
+          <a class="social-card ss-social-card reveal" href="https://whatsapp.com/channel/0029VakTbq0HQbRuymlz080T" target="_blank" rel="noopener noreferrer" aria-label="Follow the Silent Strokez WhatsApp channel">
+            <span class="ss-social-icon ss-whatsapp-icon" aria-hidden="true">◉</span>
+            <span class="ss-social-platform">CHANNEL UPDATES</span>
+            <strong>WhatsApp</strong>
+            <span class="ss-social-description">Get new artwork and channel updates in one place.</span>
+            <span class="ss-social-action">Follow channel <b aria-hidden="true">↗</b></span>
           </a>
-
-
         </div>
-
+        <p class="ss-social-footnote">One creative journey. Five ways to stay connected.</p>
       </div>
-
-    </section>
+    </section>ion>
 
 
 
