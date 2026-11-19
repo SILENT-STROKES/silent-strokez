@@ -2843,6 +2843,81 @@ body.bw .video-more-button:hover {
   @media(max-width:600px) { .ss-access-panel { left:10px; bottom:10px; } }
 </style>
 
+
+<style id="silent-strokez-about-cards-upgrade">
+  /* Refined About cards: premium, editorial styling */
+  .about-cards {
+    gap: 16px !important;
+    margin-top: 58px !important;
+    border: 0 !important;
+  }
+  .about-cards .about-card {
+    position: relative;
+    min-height: 230px;
+    padding: 30px 28px 32px !important;
+    overflow: hidden;
+    border: 1px solid rgba(21,36,30,.12) !important;
+    border-radius: 20px;
+    background: linear-gradient(145deg,#fff 0%,#f8f5ee 100%);
+    box-shadow: 0 12px 34px rgba(21,36,30,.045);
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .about-cards .about-card::after {
+    content: "";
+    position: absolute;
+    left: 28px;
+    bottom: 0;
+    width: 42px;
+    height: 3px;
+    border-radius: 4px 4px 0 0;
+    background: #b08b45;
+    transition: width .3s ease;
+  }
+  .about-cards .about-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(176,139,69,.42) !important;
+    box-shadow: 0 20px 44px rgba(21,36,30,.09);
+  }
+  .about-cards .about-card:hover::after { width: calc(100% - 56px); }
+  .about-cards .about-card-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid rgba(176,139,69,.35);
+    border-radius: 30px;
+    color: #9a7535;
+    background: rgba(176,139,69,.08);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+  }
+  .about-cards .about-card h3 {
+    margin-top: 28px !important;
+    color: #15241e;
+    font-family: "Playfair Display", Georgia, serif;
+    font-size: clamp(21px,2.2vw,25px) !important;
+    letter-spacing: -.35px;
+  }
+  .about-cards .about-card p {
+    max-width: 330px;
+    margin-top: 12px !important;
+    color: #66716b;
+    font-size: 13px !important;
+    line-height: 1.85 !important;
+  }
+  @media (max-width: 800px) {
+    .about-cards { grid-template-columns: 1fr !important; gap: 12px !important; }
+    .about-cards .about-card { min-height: 0; padding: 25px 23px 29px !important; }
+    .about-cards .about-card h3 { margin-top: 20px !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-cards .about-card, .about-cards .about-card::after { transition: none; }
+  }
+</style>
+
 </head>
 
 
@@ -3067,8 +3142,7 @@ body.bw .video-more-button:hover {
             </h3>
 
             <p>
-              Learning, creating, exploring new ideas,
-              and enjoying the journey.
+              Growing through new experiences, finding inspiration in everyday moments, and turning curiosity into ideas worth exploring.
             </p>
 
           </div>
@@ -3085,8 +3159,7 @@ body.bw .video-more-button:hover {
             </h3>
 
             <p>
-              Building knowledge and skills for my future
-              while continuing my creative journey.
+              Strengthening my knowledge, staying curious, and developing the skills that will shape my future—one lesson at a time.
             </p>
 
           </div>
@@ -3103,8 +3176,7 @@ body.bw .video-more-button:hover {
             </h3>
 
             <p>
-              Anime, sketches, illustrations,
-              drawing videos, and creative experiments.
+              Bringing imagination to life through anime art, expressive sketches, illustrations, drawing videos, and experiments with new styles.
             </p>
 
           </div>
