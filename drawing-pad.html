@@ -70,7 +70,41 @@
     body.bw #drawing-pad { background:#e9e9e9; }
     @media(max-width:850px) { #drawing-pad .draw-main { grid-template-columns:1fr; } #drawing-pad .draw-sidepanel { display:grid; grid-template-columns:1fr 1fr; gap:12px; } #drawing-pad .draw-panel-block:first-child { grid-row:span 2; } }
     @media(max-width:600px) { #drawing-pad { padding:72px 0; } #drawing-pad .draw-workspace { padding:10px; border-radius:15px; } #drawing-pad .draw-toolbar { align-items:flex-start; } #drawing-pad .draw-tool-group { width:100%; border-right:0; border-bottom:1px solid #eee; padding:0 0 9px; } #drawing-pad .draw-main { gap:9px; } #drawing-pad .draw-canvas-wrap { min-height:340px; } #drawing-pad .draw-canvas-stack { height:340px; } #drawing-pad .draw-sidepanel { grid-template-columns:1fr; } #drawing-pad .draw-bottom { align-items:flex-start; flex-direction:column; } #drawing-pad .draw-actions { width:100%; } #drawing-pad .draw-actions .draw-btn { flex:1; } }
-  </style>
+  
+    /* Fixed navigation back to the main portfolio */
+    .drawing-home-button {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 10000;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 42px;
+      padding: 0 16px;
+      border: 1px solid #e00000;
+      border-radius: 999px;
+      background: #fff;
+      color: #171717;
+      font: 750 12px/1 Inter, Arial, sans-serif;
+      text-decoration: none;
+      box-shadow: 0 6px 22px rgba(0,0,0,.10);
+      transition: background .18s ease, color .18s ease, transform .18s ease;
+    }
+    .drawing-home-button:hover {
+      background: #e00000;
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .drawing-home-button:focus-visible {
+      outline: 3px solid rgba(224,0,0,.25);
+      outline-offset: 3px;
+    }
+    @media (max-width: 600px) {
+      .drawing-home-button { top: 10px; left: 10px; min-height: 38px; padding: 0 12px; font-size: 11px; }
+    }
+</style>
 <style id="silent-strokez-global-theme-toggle">
   /* Match the selected homepage appearance across this page too. */
   body.bw { filter: grayscale(1) !important; }
@@ -145,6 +179,7 @@
 </style>
 </head>
 <body>
+  <a class="drawing-home-button" id="drawing-pad-home-button" href="index.html" aria-label="Back to Silent Strokez home">← <span>Back to Home</span></a>
   <main class="container">
     <!-- =====================================================
          DRAWING PAD 2.0 — SILENT STROKEZ CREATIVE STUDIO
