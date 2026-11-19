@@ -834,6 +834,8 @@
    MATCHED TO EXISTING HTML
 ========================================== */
 
+.youtube-latest-videos { display: contents; } /* Keep YouTube cards as direct grid items */
+
 .videos-section {
     width: 100%;
     padding: 65px 0 80px;
@@ -4829,7 +4831,7 @@ body.bw .video-more-button:hover {
       const dateText = date && !isNaN(date.getTime())
         ? date.toLocaleDateString(undefined, {day:"numeric", month:"short", year:"numeric"})
         : "LATEST UPLOAD";
-      return '<a class="video-card reveal" href="' + link + '" target="_blank" rel="noopener noreferrer">' +
+      return '<a class="video-card reveal visible" href="' + link + '" target="_blank" rel="noopener noreferrer">' +
         '<div class="video-thumbnail"><img src="' + thumbnail + '" alt="' + title + '" loading="lazy">' +
         '<div class="video-badge">YOUTUBE • LATEST</div><div class="play-button">▶</div></div>' +
         '<div class="video-info"><span class="video-category">YOUTUBE · ' + dateText + '</span>' +
