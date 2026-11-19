@@ -3462,6 +3462,7 @@ body.bw .video-more-button:hover {
         <div class="video-grid">
 
 
+          <div id="youtube-latest-videos" class="youtube-latest-videos" aria-live="polite">
           <!-- VIDEO 1 -->
 
           <a
@@ -3661,6 +3662,8 @@ body.bw .video-more-button:hover {
           </a>
 
           
+          </div>
+
           <!-- INSTAGRAM 1 -->
 
           <a
@@ -4791,5 +4794,72 @@ body.bw .video-more-button:hover {
     })();
   </script>
 
+
+<script id="silent-strokez-youtube-auto-latest">
+(function () {
+  const CHANNEL_ID = "UCOIrbi33AGQ7CRNs3s-h_lQ";
+  const FEED_URL = "https://www.youtube.com/feeds/videos.xml?channel_id=" + CHANNEL_ID;
+  const TARGET_ID = "youtube-latest-videos";
+
+  function escapeHTML(value) {
+    return String(value || "").replace(/[&<>"']/g, function (char) {
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char];
+    });
+  }
+
+  function videoIdFrom(item) {
+    const link = item.link || item.guid || "";
+    try {
+      const url = new URL(link);
+      return url.searchParams.get("v") || url.pathname.split("/").filter(Boolean).pop() || "";
+    } catch (error) {
+      return "";
+    }
+  }
+
+  function render(items, target) {
+    const videos = items.filter(function (item) { return videoIdFrom(item); }).slice(0, 6);
+    if (!videos.length) return;
+    target.innerHTML = videos.map(function (item) {
+      const id = videoIdFrom(item);
+      const title = escapeHTML(item.title || "Latest Silent Strokez video");
+      const link = "https://www.youtube.com/watch?v=" + encodeURIComponent(id);
+      const thumbnail = "https://i.ytimg.com/vi/" + encodeURIComponent(id) + "/hqdefault.jpg";
+      const date = item.pubDate ? new Date(item.pubDate) : null;
+      const dateText = date && !isNaN(date.getTime())
+        ? date.toLocaleDateString(undefined, {day:"numeric", month:"short", year:"numeric"})
+        : "LATEST UPLOAD";
+      return '<a class="video-card reveal" href="' + link + '" target="_blank" rel="noopener noreferrer">' +
+        '<div class="video-thumbnail"><img src="' + thumbnail + '" alt="' + title + '" loading="lazy">' +
+        '<div class="video-badge">YOUTUBE • LATEST</div><div class="play-button">▶</div></div>' +
+        '<div class="video-info"><span class="video-category">YOUTUBE · ' + dateText + '</span>' +
+        '<h3>' + title + '</h3><p>Watch the latest creation from Silent Strokez.</p>' +
+        '<span class="watch-link">Watch on YouTube →</span></div></a>';
+    }).join("");
+  }
+
+  async function loadLatestVideos() {
+    const target = document.getElementById(TARGET_ID);
+    if (!target) return;
+    const rssUrl = encodeURIComponent(FEED_URL);
+    const apiUrl = "https://api.rss2json.com/v1/api.json?rss_url=" + rssUrl;
+    try {
+      const response = await fetch(apiUrl, {cache:"no-store"});
+      if (!response.ok) throw new Error("Feed request failed");
+      const data = await response.json();
+      if (data.status !== "ok" || !Array.isArray(data.items)) throw new Error("Feed unavailable");
+      render(data.items, target);
+    } catch (error) {
+      console.warn("Silent Strokez latest YouTube feed could not refresh; showing saved video cards.", error);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadLatestVideos, {once:true});
+  } else {
+    loadLatestVideos();
+  }
+})();
+</script>
 </body>
 </html>
