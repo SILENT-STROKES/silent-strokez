@@ -3540,5 +3540,27 @@ body.bw .video-more-button:hover {
 
 
     
+
+  <!-- Silent Strokez loader fix: never leave the loading overlay stuck -->
+  <script id="silent-strokez-loader-fix">
+    (() => {
+      const hideLoader = () => {
+        const loader = document.getElementById("loader");
+        if (!loader || loader.classList.contains("hide")) return;
+        loader.classList.add("hide");
+        window.setTimeout(() => loader.remove(), 700);
+      };
+
+      if (document.readyState === "complete") {
+        window.setTimeout(hideLoader, 250);
+      } else {
+        window.addEventListener("load", hideLoader, { once: true });
+      }
+
+      // Fallback in case a video, image, or third-party resource never finishes.
+      window.setTimeout(hideLoader, 4000);
+    })();
+  </script>
+
 </body>
 </html>
