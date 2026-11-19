@@ -2365,6 +2365,14 @@ body.bw .video-more-button:hover {
     @media(max-width:1100px) { .ss-social-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
     @media(max-width:700px) { .ss-social-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } .ss-social-card { min-height:245px; padding:20px 14px 17px; } }
     @media(max-width:420px) { .ss-social-grid { grid-template-columns:1fr; } .ss-social-card { min-height:0; } .ss-social-card .ss-social-description { min-height:0; } }
+
+    /* Official-style platform marks in the social cards */
+    .ss-social-icon.ss-social-brand { background:#fff; padding:0; }
+    .ss-social-brand svg { display:block; width:34px; height:34px; }
+    .ss-social-brand.ss-youtube svg { width:38px; height:38px; }
+    .ss-social-brand.ss-instagram svg { width:36px; height:36px; }
+    .ss-social-brand.ss-discord svg { width:37px; height:37px; }
+    .ss-social-brand.ss-whatsapp svg { width:37px; height:37px; }
 </style>
 
 <style>
@@ -4035,7 +4043,7 @@ body.bw .video-more-button:hover {
 
         <div class="social-grid ss-social-grid">
           <a class="social-card ss-social-card reveal" href="https://pin.it/72b478MUD" target="_blank" rel="noopener noreferrer" aria-label="Visit Silent Strokez on Pinterest">
-            <span class="ss-social-icon" aria-hidden="true">P</span>
+            <span class="ss-social-icon ss-social-brand ss-pinterest" aria-hidden="true"><svg viewBox="0 0 24 24" role="img" aria-label="Pinterest logo"><circle cx="12" cy="12" r="11" fill="#E60023"/><path fill="#fff" d="M12.2 4.2c-4.1 0-6.2 2.9-6.2 5.4 0 1.5.6 2.8 1.9 3.3.2.1.4 0 .5-.2l.2-.8c.1-.3.1-.4-.2-.7-.4-.5-.7-1.1-.7-2 0-2.6 1.9-4.9 5-4.9 2.7 0 4.2 1.6 4.2 3.8 0 2.9-1.3 5.4-3.2 5.4-1.1 0-1.9-.9-1.6-2l.7-2.9c.4-1.3.1-2.4-1-2.4-1.3 0-2.3 1.3-2.3 3.1 0 1.1.4 1.8.4 1.8l-1.5 6.2c-.4 1.6-.1 3.6 0 3.8.1.1.2.1.3 0 .1-.1 1.7-2 2.2-3.5l.8-3.1c.4.8 1.5 1.5 2.7 1.5 3.5 0 5.9-3.2 5.9-7.5 0-3.2-2.7-6.2-7.1-6.2z"/></svg></span>
             <span class="ss-social-platform">GET INSPIRED</span>
             <strong>Pinterest</strong>
             <span class="ss-social-description">Explore ideas, references and creative inspiration.</span>
@@ -4043,7 +4051,7 @@ body.bw .video-more-button:hover {
           </a>
 
           <a class="social-card ss-social-card reveal" href="https://youtube.com/@sailaksh_drawin_7_official" target="_blank" rel="noopener noreferrer" aria-label="Visit Silent Strokez on YouTube">
-            <span class="ss-social-icon ss-youtube-icon" aria-hidden="true">▶</span>
+            <span class="ss-social-icon ss-social-brand ss-youtube" aria-hidden="true"><svg viewBox="0 0 24 24" role="img" aria-label="YouTube logo"><rect x="1.5" y="4.5" width="21" height="15" rx="4.2" fill="#FF0033"/><path d="M10 8.3v7.4l6.2-3.7L10 8.3z" fill="#fff"/></svg></span>
             <span class="ss-social-platform">WATCH & CREATE</span>
             <strong>YouTube</strong>
             <span class="ss-social-description">Watch anime drawings, Shorts and art videos.</span>
@@ -4051,7 +4059,7 @@ body.bw .video-more-button:hover {
           </a>
 
           <a class="social-card ss-social-card reveal" href="https://www.instagram.com/sailaksh_drawin_official" target="_blank" rel="noopener noreferrer" aria-label="Visit Silent Strokez on Instagram">
-            <span class="ss-social-icon ss-instagram-icon" aria-hidden="true">◎</span>
+            <span class="ss-social-icon ss-social-brand ss-instagram" aria-hidden="true"><svg viewBox="0 0 24 24" role="img" aria-label="Instagram logo"><defs><linearGradient id="ssInstagramGradient" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#FF7A00"/><stop offset=".48" stop-color="#E1306C"/><stop offset="1" stop-color="#833AB4"/></linearGradient></defs><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="url(#ssInstagramGradient)" stroke-width="2.2"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="url(#ssInstagramGradient)" stroke-width="2.2"/><circle cx="17.6" cy="6.7" r="1.25" fill="#E1306C"/></svg></span>
             <span class="ss-social-platform">ART & UPDATES</span>
             <strong>Instagram</strong>
             <span class="ss-social-description">See artwork, sketches and behind-the-scenes moments.</span>
@@ -4059,7 +4067,7 @@ body.bw .video-more-button:hover {
           </a>
 
           <a class="social-card ss-social-card reveal" href="https://discord.gg/D8CcjGzmh" target="_blank" rel="noopener noreferrer" aria-label="Join the Silent Strokez Discord community">
-            <span class="ss-social-icon ss-discord-icon" aria-hidden="true">⌁</span>
+            <span class="ss-social-icon ss-social-brand ss-discord" aria-hidden="true"><svg viewBox="0 0 24 24" role="img" aria-label="Discord logo"><path fill="#5865F2" d="M19.7 5.2a18 18 0 0 0-4.4-1.4l-.5 1a16 16 0 0 0-5.6 0l-.5-1a18 18 0 0 0-4.4 1.4C1.5 9.3.8 13.3 1.2 17.2a18 18 0 0 0 5.4 2.7l1.2-2a11 11 0 0 1-1.9-.9l.5-.4a12.8 12.8 0 0 0 11.2 0l.5.4a11 11 0 0 1-1.9.9l1.2 2a18 18 0 0 0 5.4-2.7c.5-4.5-.8-8.5-3.1-12zM8.7 14.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg></span>
             <span class="ss-social-platform">JOIN THE COMMUNITY</span>
             <strong>Discord</strong>
             <span class="ss-social-description">Connect with fellow creators and art enthusiasts.</span>
@@ -4067,7 +4075,7 @@ body.bw .video-more-button:hover {
           </a>
 
           <a class="social-card ss-social-card reveal" href="https://whatsapp.com/channel/0029VakTbq0HQbRuymlz080T" target="_blank" rel="noopener noreferrer" aria-label="Follow the Silent Strokez WhatsApp channel">
-            <span class="ss-social-icon ss-whatsapp-icon" aria-hidden="true">◉</span>
+            <span class="ss-social-icon ss-social-brand ss-whatsapp" aria-hidden="true"><svg viewBox="0 0 24 24" role="img" aria-label="WhatsApp logo"><path fill="#25D366" d="M12 2a9.8 9.8 0 0 0-8.4 14.9L2.3 22l5.2-1.4A9.9 9.9 0 1 0 12 2z"/><path fill="#fff" d="M17.5 14.7c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-1 1.2-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6s-.7-1.7-.9-2.3c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.1 1.1-1.1 2.6s1.1 3 1.3 3.2c.2.2 2.1 3.2 5.1 4.4.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.3z"/></svg></span>
             <span class="ss-social-platform">CHANNEL UPDATES</span>
             <strong>WhatsApp</strong>
             <span class="ss-social-description">Get new artwork and channel updates in one place.</span>
@@ -4076,7 +4084,7 @@ body.bw .video-more-button:hover {
         </div>
         <p class="ss-social-footnote">One creative journey. Five ways to stay connected.</p>
       </div>
-    </section>ion>
+    </section>
 
 
 
