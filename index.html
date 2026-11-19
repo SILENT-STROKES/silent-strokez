@@ -2814,6 +2814,34 @@ body.bw .video-more-button:hover {
     .gtranslate_wrapper { right: 10px !important; bottom: 10px !important; }
   }
 </style>
+<style id="silent-strokez-accessibility-style">
+  .ss-access-panel {
+    position: fixed; left: 16px; bottom: 18px; z-index: 999998;
+    width: min(270px, calc(100vw - 32px));
+    border: 1px solid rgba(176,139,69,.7); border-radius: 14px;
+    background: #15241e; color: #f5f0e6; box-shadow: 0 10px 32px rgba(0,0,0,.25);
+    font: 13px/1.4 Arial, sans-serif;
+  }
+  .ss-access-panel summary {
+    list-style: none; cursor: pointer; padding: 11px 14px; font-weight: 700;
+  }
+  .ss-access-panel summary::-webkit-details-marker { display:none; }
+  .ss-access-content { padding: 0 12px 12px; display: grid; gap: 10px; }
+  .ss-access-row { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .ss-access-actions { display:flex; gap:6px; }
+  .ss-access-panel button {
+    border:1px solid #b08b45; border-radius:8px; padding:7px 10px;
+    background:#f5f0e6; color:#15241e; font-weight:700; cursor:pointer;
+  }
+  .ss-access-panel button:focus-visible,
+  .ss-access-panel summary:focus-visible { outline:3px solid #e7bd69; outline-offset:3px; }
+  .ss-access-panel input { accent-color:#b08b45; }
+  html.ss-reduced-motion *, html.ss-reduced-motion *::before, html.ss-reduced-motion *::after {
+    animation-duration:.01ms !important; animation-iteration-count:1 !important;
+    transition-duration:.01ms !important; scroll-behavior:auto !important;
+  }
+  @media(max-width:600px) { .ss-access-panel { left:10px; bottom:10px; } }
+</style>
 </head>
 
 
@@ -4458,5 +4486,50 @@ body.bw .video-more-button:hover {
   };
 </script>
 <script src="https://cdn.gtranslate.net/widgets/latest/dropdown.js" defer></script>
+<details class="ss-access-panel" id="ssAccessPanel">
+  <summary aria-label="Open accessibility and display settings">⚙ Accessibility &amp; Display</summary>
+  <div class="ss-access-content">
+    <div class="ss-access-row"><span>Text / page size</span><span class="ss-access-actions">
+      <button type="button" id="ssZoomOut" aria-label="Make page smaller">A−</button>
+      <button type="button" id="ssZoomIn" aria-label="Make page larger">A+</button>
+      <button type="button" id="ssZoomReset" aria-label="Reset page size">Reset</button>
+    </span></div>
+    <label class="ss-access-row" for="ssReduceMotion"><span>Reduce animations</span><input id="ssReduceMotion" type="checkbox"></label>
+  </div>
+</details>
+<script id="silent-strokez-accessibility-script">
+(function () {
+  const root = document.documentElement;
+  const zoomKey = "ss-accessibility-zoom";
+  const motionKey = "ss-reduced-motion";
+  function getZoom() {
+    try { return Math.min(1.25, Math.max(1, Number(localStorage.getItem(zoomKey)) || 1)); }
+    catch (e) { return 1; }
+  }
+  function setZoom(value) {
+    const next = Math.min(1.25, Math.max(1, Number(value.toFixed(2))));
+    root.style.zoom = String(next);
+    try { localStorage.setItem(zoomKey, String(next)); } catch (e) {}
+  }
+  let reduce = false;
+  try { reduce = localStorage.getItem(motionKey) === "true"; } catch (e) {}
+  if (reduce) root.classList.add("ss-reduced-motion");
+  setZoom(getZoom());
+  const plus = document.getElementById("ssZoomIn");
+  const minus = document.getElementById("ssZoomOut");
+  const reset = document.getElementById("ssZoomReset");
+  const checkbox = document.getElementById("ssReduceMotion");
+  if (plus) plus.addEventListener("click", () => setZoom(getZoom() + .05));
+  if (minus) minus.addEventListener("click", () => setZoom(getZoom() - .05));
+  if (reset) reset.addEventListener("click", () => setZoom(1));
+  if (checkbox) {
+    checkbox.checked = reduce;
+    checkbox.addEventListener("change", () => {
+      root.classList.toggle("ss-reduced-motion", checkbox.checked);
+      try { localStorage.setItem(motionKey, String(checkbox.checked)); } catch (e) {}
+    });
+  }
+})();
+</script>
 </body>
 </html>
