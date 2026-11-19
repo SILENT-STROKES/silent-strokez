@@ -2373,6 +2373,50 @@ body.bw .video-more-button:hover {
     .ss-social-brand.ss-instagram svg { width:36px; height:36px; }
     .ss-social-brand.ss-discord svg { width:37px; height:37px; }
     .ss-social-brand.ss-whatsapp svg { width:37px; height:37px; }
+
+    /* Silent Strokez community — refined white and red presentation */
+    #community.ss-community-premium { padding:clamp(76px,9vw,116px) 0; background:#fff; }
+    #community.ss-community-premium .community-heading { max-width:760px; margin:0 auto 52px; text-align:center; }
+    #community.ss-community-premium .community-heading .section-label { color:#d90000; }
+    #community.ss-community-premium .community-heading .section-title strong { color:#e00000; }
+    #community.ss-community-premium .community-heading p { max-width:610px; margin:17px auto 0; color:#686868; line-height:1.8; font-size:14px; }
+    #community.ss-community-premium .community-total { display:inline-flex; flex-direction:column; align-items:center; gap:5px; margin-top:30px; padding:20px 38px 17px; border:1px solid #f0dada; border-radius:20px; background:linear-gradient(145deg,#fff,#fff8f8); box-shadow:0 10px 30px rgba(160,0,0,.045); }
+    #community.ss-community-premium .community-total-number { color:#e00000; font-size:clamp(48px,7vw,76px); font-weight:850; letter-spacing:-4px; line-height:1; }
+    #community.ss-community-premium .community-total-caption { color:#222; font-size:10px; font-weight:850; letter-spacing:2.5px; }
+    .ss-community-total-note { color:#999; font-size:11px; }
+    #community.ss-community-premium .community-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; }
+    #community.ss-community-premium .community-card { gap:26px; padding:clamp(24px,3vw,36px); border:1px solid #eee; border-radius:22px; background:#fff; box-shadow:0 12px 36px rgba(0,0,0,.045); }
+    #community.ss-community-premium .community-card:hover { border-color:#f0caca; box-shadow:0 20px 48px rgba(150,0,0,.075); }
+    #community.ss-community-premium .community-youtube::before { height:4px; background:#e00000; }
+    #community.ss-community-premium .community-instagram::before { height:4px; background:#e00000; }
+    .ss-community-card-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    #community.ss-community-premium .community-platform-top { gap:13px; min-width:0; }
+    #community.ss-community-premium .community-icon { width:50px; height:50px; border-radius:15px; }
+    #community.ss-community-premium .community-icon svg { width:27px; height:27px; display:block; }
+    #community.ss-community-premium .community-youtube .community-icon { background:#e00000; }
+    #community.ss-community-premium .community-instagram .community-icon { background:linear-gradient(135deg,#e00000,#ff5555); }
+    #community.ss-community-premium .community-platform-name { color:#e00000; font-size:9px; letter-spacing:2px; }
+    #community.ss-community-premium .community-handle { color:#191919; font-size:13px; }
+    .ss-community-platform-tag { flex-shrink:0; padding:7px 9px; border:1px solid #f1dddd; border-radius:30px; color:#b50000; background:#fff8f8; font-size:8px; font-weight:800; letter-spacing:1px; }
+    #community.ss-community-premium .community-stat-row { gap:12px; }
+    .ss-community-stat { min-width:0; padding:19px 17px; border:1px solid #f1eeee; border-radius:15px; background:#fdfbfb; }
+    #community.ss-community-premium .community-stat-value { color:#171717; font-size:clamp(32px,4vw,48px); letter-spacing:-2px; }
+    #community.ss-community-premium .community-stat-label { color:#888; font-size:9px; letter-spacing:1.5px; }
+    #community.ss-community-premium .community-milestone { gap:11px; }
+    #community.ss-community-premium .community-milestone-text { align-items:center; font-size:11px; }
+    #community.ss-community-premium .community-milestone-text strong { color:#e00000; }
+    .ss-community-percent { color:#e00000; font-weight:850; }
+    #community.ss-community-premium .community-progress { height:7px; background:#f1e7e7; }
+    #community.ss-community-premium .community-youtube .community-progress-bar,
+    #community.ss-community-premium .community-instagram .community-progress-bar { background:#e00000; }
+    .ss-community-progress-caption { color:#999; font-size:10px; }
+    #community.ss-community-premium .community-button { align-self:stretch; gap:10px; min-height:48px; border-radius:12px; background:#e00000; border-color:#e00000; font-size:9px; letter-spacing:1.1px; }
+    #community.ss-community-premium .community-instagram .community-button { background:#e00000; border-color:#e00000; }
+    #community.ss-community-premium .community-button:hover { background:#b90000; border-color:#b90000; }
+    .ss-community-disclaimer { margin:25px 0 0; color:#999; text-align:center; font-size:11px; line-height:1.7; }
+    body.bw #community.ss-community-premium { background:#fff; }
+    @media(max-width:760px) { #community.ss-community-premium .community-grid { grid-template-columns:1fr; } .ss-community-card-top { align-items:flex-start; } }
+    @media(max-width:430px) { #community.ss-community-premium .community-card { padding:22px 18px; } .ss-community-platform-tag { display:none; } .ss-community-stat { padding:16px 12px; } }
 </style>
 
 <style>
@@ -3974,7 +4018,7 @@ body.bw .video-more-button:hover {
          SUBSCRIBERS & FOLLOWERS
          Edit the STATS values in the JavaScript near the bottom.
     ====================================================== -->
-    <section id="community">
+    <section id="community" class="ss-community-premium">
       <div class="container">
         <div class="community-heading reveal">
           <span class="section-label">THE SILENT STROKEZ COMMUNITY</span>
@@ -3983,43 +4027,58 @@ body.bw .video-more-button:hover {
           <div class="community-total">
             <span class="community-total-number" id="communityTotalReach">0</span>
             <span class="community-total-caption">TOTAL COMMUNITY</span>
+            <span class="ss-community-total-note">A growing creative family</span>
           </div>
         </div>
+
         <div class="community-grid">
           <article class="community-card community-youtube reveal">
-            <div class="community-platform-top">
-              <div class="community-icon" aria-hidden="true">▶</div>
-              <div><div class="community-platform-name">YOUTUBE</div><div class="community-handle">@sailaksh_drawin_7_official</div></div>
+            <div class="ss-community-card-top">
+              <div class="community-platform-top">
+                <div class="community-icon ss-community-youtube-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><rect x="1.5" y="4.5" width="21" height="15" rx="4.2" fill="#fff"/><path d="M10 8.3v7.4l6.2-3.7L10 8.3z" fill="#e00000"/></svg>
+                </div>
+                <div><div class="community-platform-name">YOUTUBE</div><div class="community-handle">@sailaksh_drawin_7_official</div></div>
+              </div>
+              <span class="ss-community-platform-tag">VIDEO &amp; SHORTS</span>
             </div>
             <div class="community-stat-row">
-              <div><div class="community-stat-value" data-community-stat="youtubeSubscribers">0</div><div class="community-stat-label">SUBSCRIBERS</div></div>
-              <div><div class="community-stat-value" data-community-stat="youtubeViews">0</div><div class="community-stat-label">TOTAL VIEWS</div></div>
+              <div class="ss-community-stat"><div class="community-stat-value" data-community-stat="youtubeSubscribers">0</div><div class="community-stat-label">SUBSCRIBERS</div></div>
+              <div class="ss-community-stat"><div class="community-stat-value" data-community-stat="youtubeViews">0</div><div class="community-stat-label">TOTAL VIEWS</div></div>
             </div>
             <div class="community-milestone">
-              <div class="community-milestone-text"><span>Next goal: <strong data-community-goal="youtube"></strong> subscribers</span><span data-community-percent="youtube"></span></div>
+              <div class="community-milestone-text"><span>Next milestone <strong data-community-goal="youtube"></strong> subscribers</span><span class="ss-community-percent" data-community-percent="youtube"></span></div>
               <div class="community-progress"><div class="community-progress-bar" data-community-progress="youtube"></div></div>
+              <span class="ss-community-progress-caption">Keep the support going — every subscriber counts.</span>
             </div>
-            <a class="community-button" href="https://youtube.com/@sailaksh_drawin_7_official?si=NImZdxwD8kOdMG9W" target="_blank" rel="noopener noreferrer">SUBSCRIBE ON YOUTUBE →</a>
+            <a class="community-button" href="https://youtube.com/@sailaksh_drawin_7_official?si=NImZdxwD8kOdMG9W" target="_blank" rel="noopener noreferrer">SUBSCRIBE ON YOUTUBE <span aria-hidden="true">↗</span></a>
           </article>
+
           <article class="community-card community-instagram reveal">
-            <div class="community-platform-top">
-              <div class="community-icon" aria-hidden="true">◎</div>
-              <div><div class="community-platform-name">INSTAGRAM</div><div class="community-handle">@sailaksh_drawin_official</div></div>
+            <div class="ss-community-card-top">
+              <div class="community-platform-top">
+                <div class="community-icon ss-community-instagram-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#fff" stroke-width="2.1"/><circle cx="12" cy="12" r="4.1" fill="none" stroke="#fff" stroke-width="2.1"/><circle cx="17.6" cy="6.7" r="1.25" fill="#fff"/></svg>
+                </div>
+                <div><div class="community-platform-name">INSTAGRAM</div><div class="community-handle">@sailaksh_drawin_official</div></div>
+              </div>
+              <span class="ss-community-platform-tag">ART &amp; UPDATES</span>
             </div>
             <div class="community-stat-row">
-              <div><div class="community-stat-value" data-community-stat="instagramFollowers">0</div><div class="community-stat-label">FOLLOWERS</div></div>
-              <div><div class="community-stat-value" data-community-stat="instagramPosts">0</div><div class="community-stat-label">POSTS &amp; REELS</div></div>
+              <div class="ss-community-stat"><div class="community-stat-value" data-community-stat="instagramFollowers">0</div><div class="community-stat-label">FOLLOWERS</div></div>
+              <div class="ss-community-stat"><div class="community-stat-value" data-community-stat="instagramPosts">0</div><div class="community-stat-label">POSTS &amp; REELS</div></div>
             </div>
             <div class="community-milestone">
-              <div class="community-milestone-text"><span>Next goal: <strong data-community-goal="instagram"></strong> followers</span><span data-community-percent="instagram"></span></div>
+              <div class="community-milestone-text"><span>Next milestone <strong data-community-goal="instagram"></strong> followers</span><span class="ss-community-percent" data-community-percent="instagram"></span></div>
               <div class="community-progress"><div class="community-progress-bar" data-community-progress="instagram"></div></div>
+              <span class="ss-community-progress-caption">Thanks for following and sharing the artwork.</span>
             </div>
-            <a class="community-button" href="https://www.instagram.com/sailaksh_drawin_official/" target="_blank" rel="noopener noreferrer">FOLLOW ON INSTAGRAM →</a>
+            <a class="community-button" href="https://www.instagram.com/sailaksh_drawin_official/" target="_blank" rel="noopener noreferrer">FOLLOW ON INSTAGRAM <span aria-hidden="true">↗</span></a>
           </article>
         </div>
-        <p style="text-align:center;color:#888;font-size:12px;margin-top:24px">Displayed counts are manually configured and may not match live platform totals.</p>
+        <p class="ss-community-disclaimer">Community figures are manually updated and may differ from live platform totals.</p>
       </div>
-    </section>
+    </section>ion>
 
 
     <!-- =====================================================
