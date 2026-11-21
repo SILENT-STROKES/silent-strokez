@@ -321,8 +321,7 @@
 <style id="ss-floating-controls-theme-visibility-fix">
   /* Keep language, accessibility and sound controls visible in every display theme. */
   .gtranslate_wrapper,
-  .ss-access-panel,
-  #ssGlobalSoundToggle {
+  .ss-access-panel {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -332,11 +331,11 @@
   }
   .gtranslate_wrapper { right: 18px !important; bottom: 18px !important; }
   .ss-access-panel { left: 16px !important; bottom: 18px !important; }
-  #ssGlobalSoundToggle { right: max(30px, calc((100vw - 1180px) / 2)) !important; top: 162px !important; bottom: auto !important; }
+  #ssGlobalSoundToggle { display: none !important; }
   @media (max-width: 600px) {
     .gtranslate_wrapper { right: 10px !important; bottom: 10px !important; }
     .ss-access-panel { left: 10px !important; bottom: 10px !important; }
-    #ssGlobalSoundToggle { right: 18px !important; top: 150px !important; bottom: auto !important; }
+
   }
   body.bw > :not(.gtranslate_wrapper):not(.ss-access-panel):not(#ssGlobalSoundToggle):not(#ssBackgroundAudio) {
     filter: grayscale(1);
