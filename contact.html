@@ -110,6 +110,36 @@ body.bw .button:hover{background:var(--ink);color:var(--white)}
   }
 </style>
 
+
+<style id="ss-mobile-floating-controls-fix">
+/* Mobile-only positioning: desktop and tablet remain unchanged. */
+@media (max-width: 600px) {
+  .ss-access-panel {
+    position: fixed !important;
+    left: max(10px, env(safe-area-inset-left, 0px)) !important;
+    right: auto !important;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+    width: min(270px, calc(100vw - 20px)) !important;
+    max-width: calc(100vw - 20px) !important;
+    z-index: 1000000 !important;
+  }
+
+  .gtranslate_wrapper {
+    position: fixed !important;
+    left: auto !important;
+    right: max(10px, env(safe-area-inset-right, 0px)) !important;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    max-width: calc(100vw - 20px) !important;
+    z-index: 999999 !important;
+  }
+
+  .gtranslate_wrapper select,
+  .gtranslate_wrapper .gt_selector {
+    max-width: calc(100vw - 48px) !important;
+  }
+}
+</style>
+
 </head><body><header class="site-header"><nav class="nav wrap" aria-label="Main navigation"><a class="brand" href="https://silent-strokes.github.io/silent-strokez/" aria-label="Silent Strokez home"><img class="brand-logo" src="drawing-pad-favicon.png" alt="Silent Strokez illustrated logo"><span class="brand-name">SILENT STROKEZ</span></a><div class="nav-links"><a href="https://silent-strokes.github.io/silent-strokez/">Home</a><a href="gallery.html">Gallery</a><a href="contact.html" aria-current="page">Contact</a><a class="optional" href="https://www.youtube.com/@sailaksh_drawin_7_official?si=NImZdxwD8kOdMG9W" target="_blank" rel="noopener noreferrer">YouTube ↗</a><button class="mode" type="button" id="themeToggle" aria-pressed="false">BLACK &amp; WHITE</button></div></nav></header>
 <main class="wrap"><section class="hero"><div class="eyebrow">Silent Strokez · B Sailakshanth</div><h1>Let’s Connect.</h1><p class="intro">Want to see more of my work or simply connect? Find me through my social platforms or send me an email.</p></section><section class="contact-grid" aria-label="Contact links">
 <a class="contact-card" href="https://www.instagram.com/sailaksh_drawin_official/" target="_blank" rel="noopener noreferrer"><span class="icon" aria-hidden="true">◎</span><div><div class="label">Follow the artwork</div><h2>Instagram</h2><p>@sailaksh_drawin_official</p></div><span class="arrow">Visit Instagram ↗</span></a>
