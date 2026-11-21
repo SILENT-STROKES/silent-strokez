@@ -1172,5 +1172,91 @@
   }
 })();
 </script>
+
+<!-- Silent Strokez site-wide background audio -->
+<audio id="ssBackgroundAudio" preload="auto" loop playsinline>
+  <source src="assets/AVENGERS%20Intro%20Made%20By%20Insomniax.mp4" type="audio/mp4">
+</audio>
+<button id="ssGlobalSoundToggle" class="ss-global-sound-toggle" type="button"
+  aria-label="Mute background music" aria-pressed="true" title="Mute background music">
+  <svg class="ss-speaker-on" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+    <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+    <path d="M18.5 5.5a9 9 0 0 1 0 13"></path>
+  </svg>
+  <svg class="ss-speaker-off" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+    <path d="m16 9 5 6m0-6-5 6"></path>
+  </svg>
+</button>
+<style id="ss-global-sound-styles">
+  .ss-global-sound-toggle {
+    position: fixed; right: 20px; bottom: 20px; z-index: 10050;
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px; padding: 0; border: 0; border-radius: 50%;
+    background: #704326; color: #fff; cursor: pointer;
+    box-shadow: 0 5px 18px rgba(0,0,0,.24);
+    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .ss-global-sound-toggle:hover { background:#875431; transform:scale(1.07); }
+  .ss-global-sound-toggle:focus-visible { outline:3px solid #d5b36b; outline-offset:4px; }
+  .ss-global-sound-toggle svg { width:27px; height:27px; fill:none; stroke:currentColor;
+    stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+  .ss-global-sound-toggle svg path:first-child { fill:currentColor; stroke:currentColor; }
+  .ss-global-sound-toggle .ss-speaker-off { display:none; }
+  .ss-global-sound-toggle[aria-pressed="false"] .ss-speaker-on { display:none; }
+  .ss-global-sound-toggle[aria-pressed="false"] .ss-speaker-off { display:block; }
+  @media(max-width:600px) {
+    .ss-global-sound-toggle { width:44px; height:44px; right:16px; bottom:16px; }
+  }
+</style>
+<script id="ss-global-background-audio">
+(() => {
+  const audio = document.getElementById("ssBackgroundAudio");
+  const button = document.getElementById("ssGlobalSoundToggle");
+  if (!audio || !button) return;
+
+  const preferenceKey = "silentStrokezBackgroundMusic";
+  let soundEnabled = true;
+  try {
+    const saved = localStorage.getItem(preferenceKey);
+    if (saved === "off") soundEnabled = false;
+  } catch (error) {}
+
+  const updateButton = () => {
+    button.setAttribute("aria-pressed", String(soundEnabled));
+    button.setAttribute("aria-label", soundEnabled
+      ? "Mute background music" : "Turn on background music");
+    button.title = soundEnabled ? "Mute background music" : "Turn on background music";
+  };
+
+  const startAudio = async () => {
+    if (!soundEnabled) return;
+    try { await audio.play(); } catch (error) {}
+  };
+
+  audio.volume = 0.35;
+  if (soundEnabled) startAudio();
+  updateButton();
+
+  const resumeAfterInteraction = (event) => {
+    if (button.contains(event.target)) return;
+    if (soundEnabled && audio.paused) startAudio();
+    document.removeEventListener("pointerdown", resumeAfterInteraction, true);
+    document.removeEventListener("keydown", resumeAfterInteraction, true);
+  };
+  document.addEventListener("pointerdown", resumeAfterInteraction, true);
+  document.addEventListener("keydown", resumeAfterInteraction, true);
+
+  button.addEventListener("click", async () => {
+    soundEnabled = !soundEnabled;
+    try { localStorage.setItem(preferenceKey, soundEnabled ? "on" : "off"); } catch (error) {}
+    if (soundEnabled) await startAudio();
+    else audio.pause();
+    updateButton();
+  });
+})();
+</script>
+
 </body>
 </html>
