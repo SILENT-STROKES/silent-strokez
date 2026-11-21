@@ -2812,7 +2812,7 @@ body.bw .video-more-button:hover {
 <style id="silent-strokez-global-theme-toggle">
   /* One switch controls the appearance of the complete homepage. */
   body.bw {
-    filter: grayscale(1) !important;
+    filter: none !important;
   }
   body.bw #themeButton {
     filter: grayscale(1);
@@ -3114,6 +3114,32 @@ body.bw .video-more-button:hover {
   }
   @media (prefers-reduced-motion: reduce) {
     .creating-card, .status-dot { animation: none !important; transition: none !important; }
+  }
+</style>
+
+
+<style id="ss-floating-controls-theme-visibility-fix">
+  /* Keep language, accessibility and sound controls visible in every display theme. */
+  .gtranslate_wrapper,
+  .ss-access-panel,
+  #ssGlobalSoundToggle {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: fixed !important;
+    filter: none !important;
+    z-index: 1000001 !important;
+  }
+  .gtranslate_wrapper { right: 18px !important; bottom: 18px !important; }
+  .ss-access-panel { left: 16px !important; bottom: 18px !important; }
+  #ssGlobalSoundToggle { right: 20px !important; bottom: 20px !important; }
+  @media (max-width: 600px) {
+    .gtranslate_wrapper { right: 10px !important; bottom: 10px !important; }
+    .ss-access-panel { left: 10px !important; bottom: 10px !important; }
+    #ssGlobalSoundToggle { right: 16px !important; bottom: 16px !important; }
+  }
+  body.bw > :not(.gtranslate_wrapper):not(.ss-access-panel):not(#ssGlobalSoundToggle):not(#ssBackgroundAudio) {
+    filter: grayscale(1);
   }
 </style>
 
