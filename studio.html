@@ -1235,6 +1235,19 @@
     try { await audio.play(); } catch (error) {}
   };
 
+  // Preserve the soundtrack position when visitors move between site pages.
+  const positionKey = "silentStrokezBackgroundMusicPosition";
+  let savedPosition = 0;
+  try { savedPosition = Number(sessionStorage.getItem(positionKey)) || 0; } catch (error) {}
+  audio.addEventListener("loadedmetadata", () => {
+    if (savedPosition > 0 && savedPosition < audio.duration) {
+      audio.currentTime = savedPosition;
+    }
+  });
+  audio.addEventListener("timeupdate", () => {
+    try { sessionStorage.setItem(positionKey, String(audio.currentTime)); } catch (error) {}
+  });
+
   audio.volume = 0.35;
   if (soundEnabled) startAudio();
   updateButton();
