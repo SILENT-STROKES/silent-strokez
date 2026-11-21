@@ -3154,30 +3154,34 @@ body.bw .video-more-button:hover {
 
 
 <style id="ss-mobile-floating-controls-fix">
-/* Mobile-only positioning: desktop and tablet remain unchanged. */
-@media (max-width: 600px) {
-  .ss-access-panel {
+/* Mobile-only control layout. Desktop and tablet retain their existing styles. */
+@media screen and (max-width: 600px) {
+  html body details.ss-access-panel#ssAccessPanel {
     position: fixed !important;
-    left: max(10px, env(safe-area-inset-left, 0px)) !important;
-    right: auto !important;
-    bottom: calc(82px + env(safe-area-inset-bottom, 0px)) !important;
+    inset: auto auto calc(132px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px)) !important;
     width: min(270px, calc(100vw - 20px)) !important;
     max-width: calc(100vw - 20px) !important;
-    z-index: 1000000 !important;
+    margin: 0 !important;
+    z-index: 2147483646 !important;
+    transform: none !important;
   }
 
-  .gtranslate_wrapper {
+  html body .gtranslate_wrapper {
     position: fixed !important;
-    left: auto !important;
-    right: max(10px, env(safe-area-inset-right, 0px)) !important;
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    inset: auto max(10px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) auto !important;
+    display: block !important;
+    width: max-content !important;
     max-width: calc(100vw - 20px) !important;
-    z-index: 999999 !important;
+    margin: 0 !important;
+    z-index: 2147483645 !important;
+    transform: none !important;
   }
 
-  .gtranslate_wrapper select,
-  .gtranslate_wrapper .gt_selector {
-    max-width: calc(100vw - 48px) !important;
+  html body .gtranslate_wrapper select,
+  html body .gtranslate_wrapper .gt_selector {
+    width: auto !important;
+    max-width: calc(100vw - 44px) !important;
+    min-height: 42px !important;
   }
 }
 </style>
@@ -4905,9 +4909,11 @@ body.bw .video-more-button:hover {
 (() => {
   const audio = document.getElementById("ssBackgroundAudio");
   const button = document.getElementById("ssGlobalSoundToggle");
+  const video = document.getElementById("heroBackgroundVideo");
   if (!audio || !button) return;
 
   const preferenceKey = "silentStrokezBackgroundMusic";
+  const positionKey = "silentStrokezBackgroundMusicPosition";
   let soundEnabled = true;
   try {
     const saved = localStorage.getItem(preferenceKey);
@@ -4921,22 +4927,67 @@ body.bw .video-more-button:hover {
     button.title = soundEnabled ? "Mute background music" : "Turn on background music";
   };
 
-  const startAudio = async () => {
-    if (!soundEnabled) return;
-    try { await audio.play(); } catch (error) {}
+  // The homepage video is the master clock. Align the separate audio element
+  // to it before playback and gently correct any drift while both are playing.
+  const syncAudioToVideo = (force = false) => {
+    if (!video || !Number.isFinite(video.currentTime)) return;
+    if (Number.isFinite(audio.duration) && audio.duration > 0 &&
+        video.currentTime >= audio.duration) return;
+    const drift = Math.abs(audio.currentTime - video.currentTime);
+    if (force || drift > 0.22) {
+      try { audio.currentTime = video.currentTime; } catch (error) {}
+    }
+    if (video.playbackRate && audio.playbackRate !== video.playbackRate) {
+      audio.playbackRate = video.playbackRate;
+    }
   };
 
-  // Preserve the soundtrack position when visitors move between site pages.
-  const positionKey = "silentStrokezBackgroundMusicPosition";
+  const startAudio = async () => {
+    if (!soundEnabled) return;
+    try {
+      if (video && !video.paused && video.readyState >= 1) {
+        syncAudioToVideo(true);
+      }
+      await audio.play();
+    } catch (error) {}
+  };
+
+  // Retain the soundtrack position between pages where there is no hero video.
   let savedPosition = 0;
   try { savedPosition = Number(sessionStorage.getItem(positionKey)) || 0; } catch (error) {}
   audio.addEventListener("loadedmetadata", () => {
-    if (savedPosition > 0 && savedPosition < audio.duration) {
+    if (video) {
+      syncAudioToVideo(true);
+    } else if (savedPosition > 0 && savedPosition < audio.duration) {
       audio.currentTime = savedPosition;
     }
   });
+
+  if (video) {
+    video.addEventListener("timeupdate", () => syncAudioToVideo(false));
+    video.addEventListener("seeked", () => {
+      syncAudioToVideo(true);
+      if (soundEnabled && audio.paused) startAudio();
+    });
+    video.addEventListener("ratechange", () => syncAudioToVideo(true));
+    video.addEventListener("play", () => {
+      if (soundEnabled && !audio.paused) syncAudioToVideo(true);
+    });
+    video.addEventListener("pause", () => {
+      if (!video.ended) audio.pause();
+    });
+    video.addEventListener("waiting", () => audio.pause());
+    video.addEventListener("playing", () => {
+      if (soundEnabled) {
+        syncAudioToVideo(true);
+        startAudio();
+      }
+    });
+  }
+
   audio.addEventListener("timeupdate", () => {
     try { sessionStorage.setItem(positionKey, String(audio.currentTime)); } catch (error) {}
+    syncAudioToVideo(false);
   });
 
   audio.volume = 0.35;
@@ -4955,8 +5006,12 @@ body.bw .video-more-button:hover {
   button.addEventListener("click", async () => {
     soundEnabled = !soundEnabled;
     try { localStorage.setItem(preferenceKey, soundEnabled ? "on" : "off"); } catch (error) {}
-    if (soundEnabled) await startAudio();
-    else audio.pause();
+    if (soundEnabled) {
+      syncAudioToVideo(true);
+      await startAudio();
+    } else {
+      audio.pause();
+    }
     updateButton();
   });
 })();
