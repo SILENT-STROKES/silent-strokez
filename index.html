@@ -3227,6 +3227,75 @@ body.bw .video-more-button:hover {
 }
 </style>
 
+<style id="ss-desktop-floating-controls-fix">
+/* Compact desktop controls: Translate above Accessibility, Back to Top below. */
+@media screen and (min-width: 601px) {
+  html body details.ss-access-panel#ssAccessPanel {
+    position: fixed !important;
+    left: auto !important;
+    right: 16px !important;
+    bottom: 66px !important;
+    top: auto !important;
+    width: max-content !important;
+    max-width: 170px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 9px !important;
+    z-index: 2147483646 !important;
+    transform: none !important;
+    font-size: 11px !important;
+  }
+
+  html body details.ss-access-panel#ssAccessPanel > summary {
+    display: block !important;
+    padding: 8px 10px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    letter-spacing: 0 !important;
+  }
+
+  html body details.ss-access-panel#ssAccessPanel[open] {
+    width: min(250px, calc(100vw - 32px)) !important;
+    max-width: min(250px, calc(100vw - 32px)) !important;
+  }
+
+  html body .gtranslate_wrapper {
+    position: fixed !important;
+    left: auto !important;
+    right: 16px !important;
+    bottom: 112px !important;
+    top: auto !important;
+    display: block !important;
+    width: max-content !important;
+    max-width: 150px !important;
+    margin: 0 !important;
+    padding: 3px 4px !important;
+    border-radius: 9px !important;
+    z-index: 2147483645 !important;
+    transform: none !important;
+  }
+
+  html body .gtranslate_wrapper select,
+  html body .gtranslate_wrapper .gt_selector {
+    display: block !important;
+    width: 126px !important;
+    max-width: 126px !important;
+    min-height: 32px !important;
+    height: 32px !important;
+    padding: 4px 22px 4px 8px !important;
+    border-radius: 6px !important;
+    font-size: 11px !important;
+    line-height: 1.2 !important;
+  }
+
+  html body .back-top {
+    right: 16px !important;
+    bottom: 14px !important;
+    z-index: 2147483644 !important;
+  }
+}
+</style>
 </head>
 
 
