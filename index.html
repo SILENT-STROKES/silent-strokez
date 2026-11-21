@@ -4471,7 +4471,9 @@ body.bw .video-more-button:hover {
       // Attempt audible autoplay first; browser policy may require user interaction.
       tryStartWithSound();
 
-      const enableSoundAfterInteraction = async () => {
+      const enableSoundAfterInteraction = async (event) => {
+        // Let the speaker button's own click handler control its mute state.
+        if (heroSoundToggle.contains(event.target)) return;
         if (heroBackgroundVideo.muted) {
           heroBackgroundVideo.muted = false;
           try { await heroBackgroundVideo.play(); } catch (error) {}
