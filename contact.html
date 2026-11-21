@@ -13,7 +13,15 @@ body.bw .contact-card{background:#181818}
 body.bw .art{background:#1b1b1b}
 body.bw .button{border-color:var(--ink)}
 body.bw .button:hover{background:var(--ink);color:var(--white)}
-@media(max-width:480px){.nav{gap:8px}.brand{gap:8px}.brand-name{letter-spacing:.1em;font-size:9px}.nav-links{gap:8px;font-size:10px}.nav-links a:first-child{display:none}.nav-links .mode{display:inline-flex;padding:7px 8px;font-size:8px;letter-spacing:.04em}}</style><style id="silent-strokez-global-theme-toggle">
+@media(max-width:480px){.nav{gap:8px}.brand{gap:8px}.brand-name{letter-spacing:.1em;font-size:9px}.nav-links{gap:8px;font-size:10px}.nav-links a:first-child{display:none}.nav-links .mode{display:inline-flex;padding:7px 8px;font-size:8px;letter-spacing:.04em}}
+.back-home-section{display:flex;justify-content:center;align-items:center;padding:0 0 76px}
+.back-home-button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:13px 26px;border:1px solid var(--ink);border-radius:999px;background:var(--ink);color:var(--white);font-size:11px;font-weight:800;letter-spacing:.13em;text-decoration:none;text-transform:uppercase;transition:background .2s ease,color .2s ease,transform .2s ease}
+.back-home-button:hover{background:transparent;color:var(--ink);transform:translateY(-2px)}
+.back-home-button:focus-visible{outline:3px solid var(--red);outline-offset:4px}
+body.bw .back-home-button{background:var(--ink);color:var(--white);border-color:var(--ink)}
+body.bw .back-home-button:hover{background:transparent;color:var(--ink)}
+@media(max-width:540px){.back-home-section{padding:0 0 52px}.back-home-button{width:100%;max-width:320px;min-height:46px;padding:12px 18px;font-size:10px}}
+</style><style id="silent-strokez-global-theme-toggle">
   /* Match the selected homepage appearance across this page too. */
   body.bw { filter: grayscale(1) !important; }
 </style>
@@ -180,7 +188,7 @@ body.bw .button:hover{background:var(--ink);color:var(--white)}
 <a class="contact-card" href="https://www.instagram.com/sailaksh_drawin_official/" target="_blank" rel="noopener noreferrer"><span class="icon" aria-hidden="true">◎</span><div><div class="label">Follow the artwork</div><h2>Instagram</h2><p>@sailaksh_drawin_official</p></div><span class="arrow">Visit Instagram ↗</span></a>
 <a class="contact-card" href="https://discord.gg/D8CcjGzmh" target="_blank" rel="noopener noreferrer"><span class="icon" aria-hidden="true">◈</span><div><div class="label">Join the community</div><h2>Discord</h2><p>Meet the Silent Strokez community.</p></div><span class="arrow">Join Discord ↗</span></a>
 <a class="contact-card" href="mailto:sailaksh07@outlook.com"><span class="icon" aria-hidden="true">✉</span><div><div class="label">Send a message</div><h2>Email</h2><p>sailaksh07@outlook.com</p></div><span class="arrow">Email me ↗</span></a>
-</section></main><footer class="footer"><div class="footer-inner wrap"><span>© 2026 Silent Strokez. Created by B Sailakshanth.</span><a href="gallery.html">Explore the gallery →</a></div></footer><script>
+</section><section class="back-home-section" aria-label="Return to homepage"><a class="back-home-button" href="https://silent-strokes.github.io/silent-strokez/" aria-label="Back to Home">← Back to Home</a></section></main><footer class="footer"><div class="footer-inner wrap"><span>© 2026 Silent Strokez. Created by B Sailakshanth.</span><a href="gallery.html">Explore the gallery →</a></div></footer><script>
 (()=>{
  const toggle=document.getElementById('themeToggle');
  if(!toggle)return;
