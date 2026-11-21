@@ -501,22 +501,53 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 40px;
-      padding: 0 15px;
-      border: 1px solid rgba(17,17,17,.28);
-      border-radius: 999px;
-      background: rgba(255,255,255,.84);
-      color: #111;
-      font: 700 10px/1 "Inter", sans-serif;
-      letter-spacing: 1px;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #704326;
+      color: #fff;
       cursor: pointer;
+      box-shadow: 0 5px 18px rgba(0,0,0,.22);
       backdrop-filter: blur(10px);
-      transition: background .2s ease, transform .2s ease;
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
     }
 
     #home .hero-sound-toggle:hover {
-      background: #fff;
-      transform: translateY(-2px);
+      background: #875431;
+      transform: scale(1.07);
+      box-shadow: 0 7px 22px rgba(0,0,0,.28);
+    }
+
+    #home .hero-sound-toggle:focus-visible {
+      outline: 3px solid #d5b36b;
+      outline-offset: 4px;
+    }
+
+    #home .hero-sound-toggle .sound-icon {
+      width: 27px;
+      height: 27px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #home .hero-sound-toggle .sound-icon-on path:first-child,
+    #home .hero-sound-toggle .sound-icon-off path:first-child {
+      fill: currentColor;
+      stroke: currentColor;
+    }
+
+    #home .hero-sound-toggle .sound-icon-off,
+    #home .hero-sound-toggle[aria-pressed="false"] .sound-icon-on {
+      display: none;
+    }
+
+    #home .hero-sound-toggle[aria-pressed="false"] .sound-icon-off {
+      display: block;
     }
 
     #home .hero {
@@ -524,17 +555,16 @@
     }
 
     body.bw #home .hero-sound-toggle {
-      border-color: rgba(17,17,17,.35);
-      background: rgba(245,245,245,.88);
-      color: #111;
+      background: #704326;
+      color: #fff;
     }
 
     @media (max-width: 600px) {
       #home .hero-sound-toggle {
         top: 16px;
         right: 18px;
-        min-height: 38px;
-        padding: 0 12px;
+        width: 44px;
+        height: 44px;
       }
     }
 
@@ -3259,11 +3289,19 @@ body.bw .video-more-button:hover {
 
     <section id="home">
 
-            <video id="heroBackgroundVideo" class="hero-background-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+            <video id="heroBackgroundVideo" class="hero-background-video" autoplay loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
         <source src="assets/AVENGERS%20Intro%20Made%20By%20Insomniax.mp4" type="video/mp4">
       </video>
-      <button id="heroSoundToggle" class="hero-sound-toggle" type="button" aria-pressed="false" aria-label="Turn on background video sound">
-        SOUND OFF
+      <button id="heroSoundToggle" class="hero-sound-toggle" type="button" aria-pressed="true" aria-label="Mute background video" title="Mute background video">
+        <svg class="sound-icon sound-icon-on" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+          <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+          <path d="M18.5 5.5a9 9 0 0 1 0 13"></path>
+        </svg>
+        <svg class="sound-icon sound-icon-off" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+          <path d="m16 9 5 6m0-6-5 6"></path>
+        </svg>
       </button>
 
      
@@ -4399,26 +4437,61 @@ body.bw .video-more-button:hover {
         heroBackgroundVideo.playbackRate = 1;
       };
 
-      normalPlaybackSpeed();
-      heroBackgroundVideo.addEventListener("loadedmetadata", normalPlaybackSpeed);
-
-      heroSoundToggle.addEventListener("click", () => {
-        const soundOn = heroBackgroundVideo.muted;
-        heroBackgroundVideo.muted = !soundOn;
+      const updateSoundButton = () => {
+        const soundOn = !heroBackgroundVideo.muted;
         heroSoundToggle.setAttribute("aria-pressed", String(soundOn));
-        heroSoundToggle.textContent = soundOn ? "SOUND ON" : "SOUND OFF";
         heroSoundToggle.setAttribute(
           "aria-label",
           soundOn ? "Mute background video" : "Turn on background video sound"
         );
+        heroSoundToggle.title = soundOn
+          ? "Mute background video"
+          : "Turn on background video sound";
+      };
 
-        if (soundOn) {
-          const playback = heroBackgroundVideo.play();
-          if (playback && typeof playback.catch === "function") {
-            playback.catch(() => {});
-          }
+      const tryStartWithSound = async () => {
+        heroBackgroundVideo.muted = false;
+        try {
+          await heroBackgroundVideo.play();
+        } catch (error) {
+          // Browsers may block audible autoplay. Keep the video playing silently
+          // until the visitor's first interaction, then enable its sound.
+          heroBackgroundVideo.muted = true;
+          try { await heroBackgroundVideo.play(); } catch (playError) {}
         }
+        updateSoundButton();
+      };
+
+      normalPlaybackSpeed();
+      heroBackgroundVideo.addEventListener("loadedmetadata", normalPlaybackSpeed);
+      heroBackgroundVideo.addEventListener("canplay", () => {
+        if (!heroBackgroundVideo.paused && !heroBackgroundVideo.muted) updateSoundButton();
       });
+
+      // Attempt audible autoplay first; browser policy may require user interaction.
+      tryStartWithSound();
+
+      const enableSoundAfterInteraction = async () => {
+        if (heroBackgroundVideo.muted) {
+          heroBackgroundVideo.muted = false;
+          try { await heroBackgroundVideo.play(); } catch (error) {}
+          updateSoundButton();
+        }
+        document.removeEventListener("pointerdown", enableSoundAfterInteraction, true);
+        document.removeEventListener("keydown", enableSoundAfterInteraction, true);
+      };
+      document.addEventListener("pointerdown", enableSoundAfterInteraction, true);
+      document.addEventListener("keydown", enableSoundAfterInteraction, true);
+
+      heroSoundToggle.addEventListener("click", async () => {
+        heroBackgroundVideo.muted = !heroBackgroundVideo.muted;
+        if (!heroBackgroundVideo.muted) {
+          try { await heroBackgroundVideo.play(); } catch (error) {}
+        }
+        updateSoundButton();
+      });
+
+      updateSoundButton();
     }
 
 
