@@ -5098,7 +5098,6 @@ body.bw .video-more-button:hover {
   const video = document.getElementById("heroBackgroundVideo");
   if (!video) return;
   const startVideo = () => {
-    video.muted = !document.documentElement.classList.contains("ss-audio-enabled");
     video.play().catch(() => {});
   };
   video.addEventListener("loadeddata", () => {
