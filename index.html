@@ -59,7 +59,7 @@
     body {
       font-family: "Inter", sans-serif;
       color: #111;
-      background: transparent;
+      background: #fff;
       line-height: 1.5;
       overflow-x: hidden;
       transition: background .35s ease, color .35s ease;
@@ -477,41 +477,6 @@
       background: #aaa;
     }
 
-
-    /* SITE-WIDE BACKGROUND VIDEO: remains playing behind every homepage section */
-    #home {
-      isolation: isolate;
-    }
-
-    .hero-background-video.ss-sitewide-video {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      object-fit: cover;
-      opacity: .30;
-      pointer-events: none;
-    }
-
-    body.bw .hero-background-video.ss-sitewide-video {
-      filter: grayscale(1);
-    }
-
-    /* A soft translucent surface lets the moving video remain visible through every section. */
-    main {
-      position: relative;
-      z-index: 1;
-    }
-
-    main > section {
-      background: rgba(245, 240, 230, .76) !important;
-    }
-
-    body.bw main > section {
-      background: rgba(8, 8, 10, .78) !important;
-    }
 
 /* =====================================================
        ABOUT
@@ -4993,11 +4958,6 @@ body.bw .video-more-button:hover {
 })();
 </script>
 
-<!-- Silent Strokez site-wide background audio -->
-<audio id="ssBackgroundAudio" preload="auto" loop playsinline>
-  <source src="assets/AVENGERS%20Intro%20Made%20By%20Insomniax.mp4" type="audio/mp4">
-</audio>
-
 <style id="ss-global-sound-styles">
   .ss-global-sound-toggle {
     position: fixed; right: 20px; bottom: 20px; z-index: 10050;
@@ -5032,20 +4992,23 @@ body.bw .video-more-button:hover {
 </style>
 <script id="ss-global-background-audio">
 (() => {
-  const audio = document.getElementById("ssBackgroundAudio");
   const button = document.getElementById("ssGlobalSoundToggle");
   const video = document.getElementById("heroBackgroundVideo");
-  if (!audio || !button || !video) return;
+  if (!button || !video) return;
 
-  // Keep the same video element alive across every homepage section.
-  video.classList.add("ss-sitewide-video");
-  document.body.prepend(video);
-
+  // Keep the video inside the Welcome hero. Its own audio track stays perfectly
+  // synchronized and continues playing when the visitor scrolls or changes tabs.
   const preferenceKey = "silentStrokezBackgroundMusic";
-  let soundEnabled = true;
+  let soundEnabled = false;
+  let hasSavedPreference = false;
   try {
-    if (localStorage.getItem(preferenceKey) === "off") soundEnabled = false;
+    const saved = localStorage.getItem(preferenceKey);
+    hasSavedPreference = saved !== null;
+    soundEnabled = saved === "on";
   } catch (error) {}
+
+  video.muted = !soundEnabled;
+  video.volume = 0.35;
 
   const updateButton = () => {
     button.setAttribute("aria-pressed", String(soundEnabled));
@@ -5053,67 +5016,42 @@ body.bw .video-more-button:hover {
     button.title = soundEnabled ? "Mute background music" : "Turn on background music";
   };
 
-  const syncAudioToVideo = (force = false) => {
-    if (!Number.isFinite(video.currentTime)) return;
-    if (Number.isFinite(audio.duration) && audio.duration > 0 &&
-        video.currentTime >= audio.duration) return;
-    if (force || Math.abs(audio.currentTime - video.currentTime) > 0.18) {
-      try { audio.currentTime = video.currentTime; } catch (error) {}
-    }
-    if (video.playbackRate && audio.playbackRate !== video.playbackRate) {
-      audio.playbackRate = video.playbackRate;
-    }
-  };
-
-  const startMediaTogether = async () => {
-    if (!soundEnabled) {
-      video.muted = true;
-      return;
-    }
-    video.muted = true; // The separate audio element provides the soundtrack.
-    try {
-      if (video.readyState >= 1) syncAudioToVideo(true);
-      await video.play();
-      await audio.play();
-    } catch (error) {
-      // Browser autoplay policies may require the visitor to press the sound control.
-    }
-  };
-
-  video.addEventListener("loadedmetadata", () => syncAudioToVideo(true));
-  video.addEventListener("timeupdate", () => syncAudioToVideo(false));
-  video.addEventListener("seeking", () => { if (audio.readyState >= 1) syncAudioToVideo(true); });
-  video.addEventListener("seeked", () => syncAudioToVideo(true));
-  video.addEventListener("ratechange", () => syncAudioToVideo(true));
-  video.addEventListener("play", () => {
-    if (soundEnabled && audio.paused) startMediaTogether();
-  });
-  audio.addEventListener("loadedmetadata", () => syncAudioToVideo(true));
-  audio.addEventListener("timeupdate", () => syncAudioToVideo(false));
-
-  audio.volume = 0.35;
-  video.muted = true;
-  updateButton();
-  startMediaTogether();
-
-  const resumeAfterInteraction = () => {
-    if (soundEnabled && (audio.paused || video.paused)) startMediaTogether();
-    document.removeEventListener("pointerdown", resumeAfterInteraction, true);
-    document.removeEventListener("keydown", resumeAfterInteraction, true);
-  };
-  document.addEventListener("pointerdown", resumeAfterInteraction, true);
-  document.addEventListener("keydown", resumeAfterInteraction, true);
-
-  button.addEventListener("click", async () => {
-    soundEnabled = !soundEnabled;
-    try { localStorage.setItem(preferenceKey, soundEnabled ? "on" : "off"); } catch (error) {}
-    if (soundEnabled) {
-      await startMediaTogether();
-    } else {
-      audio.pause();
+  const setSound = async (enabled, save = true) => {
+    soundEnabled = enabled;
+    video.muted = !soundEnabled;
+    if (save) {
+      try { localStorage.setItem(preferenceKey, soundEnabled ? "on" : "off"); } catch (error) {}
     }
     updateButton();
-  });
+    if (soundEnabled) {
+      try { await video.play(); } catch (error) {
+        // Chrome and other browsers may require another user gesture before sound is allowed.
+      }
+    }
+  };
+
+  // Browsers block audible autoplay. Start sound on the visitor's first
+  // interaction anywhere on the page, unless they previously chose mute.
+  const unlockSound = (event) => {
+    if (event.target && (event.target === button || button.contains(event.target))) return;
+    if (!soundEnabled && !hasSavedPreference) {
+      hasSavedPreference = true;
+      setSound(true);
+    }
+    document.removeEventListener("pointerdown", unlockSound, true);
+    document.removeEventListener("keydown", unlockSound, true);
+  };
+
+  button.addEventListener("click", () => setSound(!soundEnabled));
+  if (!hasSavedPreference) {
+    document.addEventListener("pointerdown", unlockSound, true);
+    document.addEventListener("keydown", unlockSound, true);
+  }
+  updateButton();
+
+  // Keep the hero video running; do not pause it when it scrolls out of view
+  // or when the browser tab becomes inactive.
+  video.play().catch(() => {});
 })();
 </script>
 
