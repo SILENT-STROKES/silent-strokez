@@ -59,7 +59,7 @@
     body {
       font-family: "Inter", sans-serif;
       color: #111;
-      background: #fff;
+      background: transparent;
       line-height: 1.5;
       overflow-x: hidden;
       transition: background .35s ease, color .35s ease;
@@ -486,7 +486,7 @@
     .hero-background-video.ss-sitewide-video {
       position: fixed;
       inset: 0;
-      z-index: -1;
+      z-index: 0;
       width: 100vw;
       height: 100vh;
       height: 100dvh;
@@ -497,6 +497,20 @@
 
     body.bw .hero-background-video.ss-sitewide-video {
       filter: grayscale(1);
+    }
+
+    /* A soft translucent surface lets the moving video remain visible through every section. */
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    main > section {
+      background: rgba(245, 240, 230, .76) !important;
+    }
+
+    body.bw main > section {
+      background: rgba(8, 8, 10, .78) !important;
     }
 
 /* =====================================================
