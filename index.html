@@ -478,23 +478,24 @@
     }
 
 
-    /* HOMEPAGE BACKGROUND VIDEO */
+    /* SITE-WIDE BACKGROUND VIDEO: remains playing behind every homepage section */
     #home {
       isolation: isolate;
     }
 
-    #home .hero-background-video {
-      position: absolute;
+    .hero-background-video.ss-sitewide-video {
+      position: fixed;
       inset: 0;
-      z-index: 0;
-      width: 100%;
-      height: 100%;
+      z-index: -1;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
       object-fit: cover;
-      opacity: 1;
+      opacity: .30;
       pointer-events: none;
     }
 
-body.bw #home .hero-background-video {
+    body.bw .hero-background-video.ss-sitewide-video {
       filter: grayscale(1);
     }
 
@@ -5020,13 +5021,14 @@ body.bw .video-more-button:hover {
   const audio = document.getElementById("ssBackgroundAudio");
   const button = document.getElementById("ssGlobalSoundToggle");
   const video = document.getElementById("heroBackgroundVideo");
-  const hero = document.getElementById("home");
-  if (!audio || !button) return;
+  if (!audio || !button || !video) return;
+
+  // Keep the same video element alive across every homepage section.
+  video.classList.add("ss-sitewide-video");
+  document.body.prepend(video);
 
   const preferenceKey = "silentStrokezBackgroundMusic";
-  const positionKey = "silentStrokezBackgroundMusicPosition";
   let soundEnabled = true;
-  let followVideoTimeline = true;
   try {
     if (localStorage.getItem(preferenceKey) === "off") soundEnabled = false;
   } catch (error) {}
@@ -5038,70 +5040,50 @@ body.bw .video-more-button:hover {
   };
 
   const syncAudioToVideo = (force = false) => {
-    if (!followVideoTimeline || !video || !Number.isFinite(video.currentTime)) return;
-    if (Number.isFinite(audio.duration) && audio.duration > 0 && video.currentTime >= audio.duration) return;
-    if (force || Math.abs(audio.currentTime - video.currentTime) > 0.22) {
+    if (!Number.isFinite(video.currentTime)) return;
+    if (Number.isFinite(audio.duration) && audio.duration > 0 &&
+        video.currentTime >= audio.duration) return;
+    if (force || Math.abs(audio.currentTime - video.currentTime) > 0.18) {
       try { audio.currentTime = video.currentTime; } catch (error) {}
     }
-    if (video.playbackRate && audio.playbackRate !== video.playbackRate) audio.playbackRate = video.playbackRate;
+    if (video.playbackRate && audio.playbackRate !== video.playbackRate) {
+      audio.playbackRate = video.playbackRate;
+    }
   };
 
-  const startAudio = async () => {
-    if (!soundEnabled) return;
+  const startMediaTogether = async () => {
+    if (!soundEnabled) {
+      video.muted = true;
+      return;
+    }
+    video.muted = true; // The separate audio element provides the soundtrack.
     try {
-      if (followVideoTimeline && video && !video.paused && video.readyState >= 1) syncAudioToVideo(true);
+      if (video.readyState >= 1) syncAudioToVideo(true);
+      await video.play();
       await audio.play();
     } catch (error) {
-      // Browsers may require a user gesture; the sound button and first interaction retry playback.
+      // Browser autoplay policies may require the visitor to press the sound control.
     }
   };
 
-  // Follow the intro video only while the hero is on screen. Once the visitor
-  // scrolls away, let the music run independently instead of stopping with the video.
-  const checkHeroVisibility = () => {
-    if (!hero) return;
-    const rect = hero.getBoundingClientRect();
-    if (rect.bottom <= 0 || rect.top >= window.innerHeight) {
-      followVideoTimeline = false;
-      if (soundEnabled && audio.paused) startAudio();
-    }
-  };
-  window.addEventListener("scroll", checkHeroVisibility, {passive:true});
-  window.addEventListener("resize", checkHeroVisibility, {passive:true});
-
-  let savedPosition = 0;
-  try { savedPosition = Number(sessionStorage.getItem(positionKey)) || 0; } catch (error) {}
-  audio.addEventListener("loadedmetadata", () => {
-    if (followVideoTimeline && video) syncAudioToVideo(true);
-    else if (savedPosition > 0 && savedPosition < audio.duration) audio.currentTime = savedPosition;
+  video.addEventListener("loadedmetadata", () => syncAudioToVideo(true));
+  video.addEventListener("timeupdate", () => syncAudioToVideo(false));
+  video.addEventListener("seeking", () => { if (audio.readyState >= 1) syncAudioToVideo(true); });
+  video.addEventListener("seeked", () => syncAudioToVideo(true));
+  video.addEventListener("ratechange", () => syncAudioToVideo(true));
+  video.addEventListener("play", () => {
+    if (soundEnabled && audio.paused) startMediaTogether();
   });
-
-  if (video) {
-    video.addEventListener("timeupdate", () => syncAudioToVideo(false));
-    video.addEventListener("seeked", () => syncAudioToVideo(true));
-    video.addEventListener("ratechange", () => syncAudioToVideo(true));
-    video.addEventListener("playing", () => {
-      if (soundEnabled && followVideoTimeline) {
-        syncAudioToVideo(true);
-        startAudio();
-      }
-    });
-    // Intentionally do not pause the soundtrack when the hero video pauses,
-    // buffers, or moves out of view during scrolling.
-  }
-
-  audio.addEventListener("timeupdate", () => {
-    try { sessionStorage.setItem(positionKey, String(audio.currentTime)); } catch (error) {}
-    syncAudioToVideo(false);
-  });
+  audio.addEventListener("loadedmetadata", () => syncAudioToVideo(true));
+  audio.addEventListener("timeupdate", () => syncAudioToVideo(false));
 
   audio.volume = 0.35;
-  if (soundEnabled) startAudio();
+  video.muted = true;
   updateButton();
+  startMediaTogether();
 
-  const resumeAfterInteraction = (event) => {
-    if (button.contains(event.target)) return;
-    if (soundEnabled && audio.paused) startAudio();
+  const resumeAfterInteraction = () => {
+    if (soundEnabled && (audio.paused || video.paused)) startMediaTogether();
     document.removeEventListener("pointerdown", resumeAfterInteraction, true);
     document.removeEventListener("keydown", resumeAfterInteraction, true);
   };
@@ -5111,12 +5093,13 @@ body.bw .video-more-button:hover {
   button.addEventListener("click", async () => {
     soundEnabled = !soundEnabled;
     try { localStorage.setItem(preferenceKey, soundEnabled ? "on" : "off"); } catch (error) {}
-    if (soundEnabled) await startAudio();
-    else audio.pause();
+    if (soundEnabled) {
+      await startMediaTogether();
+    } else {
+      audio.pause();
+    }
     updateButton();
   });
-
-  checkHeroVisibility();
 })();
 </script>
 
