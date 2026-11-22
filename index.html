@@ -5020,79 +5020,74 @@ body.bw .video-more-button:hover {
   const audio = document.getElementById("ssBackgroundAudio");
   const button = document.getElementById("ssGlobalSoundToggle");
   const video = document.getElementById("heroBackgroundVideo");
+  const hero = document.getElementById("home");
   if (!audio || !button) return;
 
   const preferenceKey = "silentStrokezBackgroundMusic";
   const positionKey = "silentStrokezBackgroundMusicPosition";
   let soundEnabled = true;
+  let followVideoTimeline = true;
   try {
-    const saved = localStorage.getItem(preferenceKey);
-    if (saved === "off") soundEnabled = false;
+    if (localStorage.getItem(preferenceKey) === "off") soundEnabled = false;
   } catch (error) {}
 
   const updateButton = () => {
     button.setAttribute("aria-pressed", String(soundEnabled));
-    button.setAttribute("aria-label", soundEnabled
-      ? "Mute background music" : "Turn on background music");
+    button.setAttribute("aria-label", soundEnabled ? "Mute background music" : "Turn on background music");
     button.title = soundEnabled ? "Mute background music" : "Turn on background music";
   };
 
-  // The homepage video is the master clock. Align the separate audio element
-  // to it before playback and gently correct any drift while both are playing.
   const syncAudioToVideo = (force = false) => {
-    if (!video || !Number.isFinite(video.currentTime)) return;
-    if (Number.isFinite(audio.duration) && audio.duration > 0 &&
-        video.currentTime >= audio.duration) return;
-    const drift = Math.abs(audio.currentTime - video.currentTime);
-    if (force || drift > 0.22) {
+    if (!followVideoTimeline || !video || !Number.isFinite(video.currentTime)) return;
+    if (Number.isFinite(audio.duration) && audio.duration > 0 && video.currentTime >= audio.duration) return;
+    if (force || Math.abs(audio.currentTime - video.currentTime) > 0.22) {
       try { audio.currentTime = video.currentTime; } catch (error) {}
     }
-    if (video.playbackRate && audio.playbackRate !== video.playbackRate) {
-      audio.playbackRate = video.playbackRate;
-    }
+    if (video.playbackRate && audio.playbackRate !== video.playbackRate) audio.playbackRate = video.playbackRate;
   };
 
   const startAudio = async () => {
     if (!soundEnabled) return;
     try {
-      if (video && !video.paused && video.readyState >= 1) {
-        syncAudioToVideo(true);
-      }
+      if (followVideoTimeline && video && !video.paused && video.readyState >= 1) syncAudioToVideo(true);
       await audio.play();
-    } catch (error) {}
+    } catch (error) {
+      // Browsers may require a user gesture; the sound button and first interaction retry playback.
+    }
   };
 
-  // Retain the soundtrack position between pages where there is no hero video.
+  // Follow the intro video only while the hero is on screen. Once the visitor
+  // scrolls away, let the music run independently instead of stopping with the video.
+  const checkHeroVisibility = () => {
+    if (!hero) return;
+    const rect = hero.getBoundingClientRect();
+    if (rect.bottom <= 0 || rect.top >= window.innerHeight) {
+      followVideoTimeline = false;
+      if (soundEnabled && audio.paused) startAudio();
+    }
+  };
+  window.addEventListener("scroll", checkHeroVisibility, {passive:true});
+  window.addEventListener("resize", checkHeroVisibility, {passive:true});
+
   let savedPosition = 0;
   try { savedPosition = Number(sessionStorage.getItem(positionKey)) || 0; } catch (error) {}
   audio.addEventListener("loadedmetadata", () => {
-    if (video) {
-      syncAudioToVideo(true);
-    } else if (savedPosition > 0 && savedPosition < audio.duration) {
-      audio.currentTime = savedPosition;
-    }
+    if (followVideoTimeline && video) syncAudioToVideo(true);
+    else if (savedPosition > 0 && savedPosition < audio.duration) audio.currentTime = savedPosition;
   });
 
   if (video) {
     video.addEventListener("timeupdate", () => syncAudioToVideo(false));
-    video.addEventListener("seeked", () => {
-      syncAudioToVideo(true);
-      if (soundEnabled && audio.paused) startAudio();
-    });
+    video.addEventListener("seeked", () => syncAudioToVideo(true));
     video.addEventListener("ratechange", () => syncAudioToVideo(true));
-    video.addEventListener("play", () => {
-      if (soundEnabled && !audio.paused) syncAudioToVideo(true);
-    });
-    video.addEventListener("pause", () => {
-      if (!video.ended) audio.pause();
-    });
-    video.addEventListener("waiting", () => audio.pause());
     video.addEventListener("playing", () => {
-      if (soundEnabled) {
+      if (soundEnabled && followVideoTimeline) {
         syncAudioToVideo(true);
         startAudio();
       }
     });
+    // Intentionally do not pause the soundtrack when the hero video pauses,
+    // buffers, or moves out of view during scrolling.
   }
 
   audio.addEventListener("timeupdate", () => {
@@ -5116,14 +5111,12 @@ body.bw .video-more-button:hover {
   button.addEventListener("click", async () => {
     soundEnabled = !soundEnabled;
     try { localStorage.setItem(preferenceKey, soundEnabled ? "on" : "off"); } catch (error) {}
-    if (soundEnabled) {
-      syncAudioToVideo(true);
-      await startAudio();
-    } else {
-      audio.pause();
-    }
+    if (soundEnabled) await startAudio();
+    else audio.pause();
     updateButton();
   });
+
+  checkHeroVisibility();
 })();
 </script>
 
