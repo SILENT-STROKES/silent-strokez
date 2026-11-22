@@ -5055,5 +5055,62 @@ body.bw .video-more-button:hover {
 })();
 </script>
 
+
+<style id="ss-home-video-placement-final-fix">
+  /* The intro video belongs ONLY to the Welcome section. */
+  #home {
+    position: relative !important;
+    overflow: hidden !important;
+    isolation: isolate !important;
+  }
+  #home > #heroBackgroundVideo,
+  #home .hero-background-video {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    object-position: center center !important;
+    z-index: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+    transform: none !important;
+    pointer-events: none !important;
+  }
+  #home::before { z-index: 1 !important; }
+  #home > .hero,
+  #home .ss-global-sound-toggle { position: relative; z-index: 2 !important; }
+  #home .ss-global-sound-toggle { position: absolute !important; }
+</style>
+<script id="ss-home-video-playback-final-fix">
+(() => {
+  const video = document.getElementById("heroBackgroundVideo");
+  if (!video) return;
+  const startVideo = () => {
+    video.muted = !document.documentElement.classList.contains("ss-audio-enabled");
+    video.play().catch(() => {});
+  };
+  video.addEventListener("loadeddata", () => {
+    video.play().catch(() => {});
+  }, { once: true });
+  // Keep playback alive when the hero scrolls out of view or another tab is selected.
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden && video.paused) video.play().catch(() => {});
+  });
+  startVideo();
+})();
+</script>
+
 </body>
 </html>
